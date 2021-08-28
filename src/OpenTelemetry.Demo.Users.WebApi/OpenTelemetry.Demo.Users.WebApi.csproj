@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <UserSecretsId>de093fec-6a77-4020-94fe-23fcc0bb0a7f</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.13" />
+        <PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.2.0-alpha2" />
+        <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.2.0-alpha2" />
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.0.0-rc7" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc7" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.0.0-rc7" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\OpenTelemetry.Demo.Public.Contracts\OpenTelemetry.Demo.Public.Contracts.csproj" />
+    </ItemGroup>
+
+</Project>
