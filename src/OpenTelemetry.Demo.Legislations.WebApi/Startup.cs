@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using OpenTelemetry.Demo.Users.WebApi.Extensions;
+using OpenTelemetry.Demo.Legislations.WebApi.Extensions;
+using OpenTelemetry.Demo.Public.Contracts.Options;
 
-namespace OpenTelemetry.Demo.Users.WebApi
+namespace OpenTelemetry.Demo.Legislations.WebApi
 {
     public class Startup
     {
@@ -16,16 +17,16 @@ namespace OpenTelemetry.Demo.Users.WebApi
 
         public IConfiguration Configuration { get; }
 
+        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddOpenTelemetry(Configuration);
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "OpenTelemetry.Demo.Users.WebApi", Version = "v1" });
+                c.SwaggerDoc("v1",
+                    new OpenApiInfo {Title = "OpenTelemetry.Demo.Legislations.WebApi", Version = "v1"});
             });
-            services.AddDbMigrations(Configuration);
-            services.AddHttpClients(Configuration);
-            services.AddOpenTelemetry(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -33,7 +34,8 @@ namespace OpenTelemetry.Demo.Users.WebApi
         {
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "OpenTelemetry.Demo.Users.WebApi v1"));
+            app.UseSwaggerUI(c =>
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "OpenTelemetry.Demo.Legislations.WebApi v1"));
 
             app.UseHttpsRedirection();
 

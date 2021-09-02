@@ -3,8 +3,8 @@ version: '3.4'
 networks:
   open-telemetry:
     name: custom-network
-    
-services:  
+
+services:
   jaeger:
     image: jaegertracing/all-in-one
     container_name: jaeger
@@ -20,8 +20,30 @@ services:
     networks:
       - open-telemetry
 
-  users-webapi:
-    container_name: users-webapi
+  usersDb:
+    image: mcmoe/mssqldocker
+    container_name: usersDb
+    environment:
+      - SA_PASSWORD=Password123!
+      - ACCEPT_EULA=Y
+      - MSSQL_DB=UsersStore
+      - MSSQL_USER=sqlserver
+      - MSSQL_PASSWORD=Password123!
+    ports:
+      - "5333:1433"
+    networks:
+      - open-telemetry
+
+  redis:
+    image: redis:6.2.1
+    container_name: redis    
+    ports:
+      - 6379:6379
+    networks:
+      - open-telemetry
+
+  userswebapi:
+    container_name: userswebapi
     image: ${DOCKER_REGISTRY-}opentelemetry.demo.users.webapi
     build:
       context: .
@@ -30,8 +52,30 @@ services:
       - "5000:80"
     networks:
       - open-telemetry
-    depends_on: 
+    depends_on:
       - jaeger
+      - usersDb
+      - legislationswebapi
     environment:
-      Jaeger__AgentHost: jaeger
-      Jaeger__AgentPort: 6831
+      JaegerExporter__AgentHost: jaeger
+      JaegerExporter__AgentPort: 6831
+      Datasource__ConnectionString: Server=usersDb;Database=UsersStore;Integrated Security=False;User ID=sqlserver;Password=Password123!;Application Name=UsersService;ConnectRetryCount=5;ConnectRetryInterval=5;
+      
+  legislationswebapi:
+    container_name: legislationsswebapi
+    image: ${DOCKER_REGISTRY-}opentelemetry.demo.legislations.webapi
+    build:
+      context: .
+      dockerfile: src/OpenTelemetry.Demo.Legislations.WebApi/Dockerfile
+    ports:
+      - "6000:80"
+    networks:
+      - open-telemetry
+    depends_on:
+      - jaeger
+      - redis
+    environment:
+      JaegerExporter__AgentHost: jaeger
+      JaegerExporter__AgentPort: 6831
+      Redis__Host: redis
+      Redis__Port: 6379

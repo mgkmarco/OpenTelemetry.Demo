@@ -7,6 +7,6 @@ namespace OpenTelemetry.Demo.Public.Contracts.Clients
     public interface ILegislationsClient
     {
         [Get("/user/{userId}")]
-        Task<LegislationsResponseDto> GetLegislation(int userId);
+        Task<LegislationsResponseDto> GetLegislationAsync(int userId);
     }
 }

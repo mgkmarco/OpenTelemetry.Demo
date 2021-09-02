@@ -1,8 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Data.SqlClient;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry.Context.Propagation;
 using OpenTelemetry.Demo.Public.Contracts.DTOs;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Dapper;
+using Microsoft.Extensions.Options;
+using OpenTelemetry.Demo.Public.Contracts.Clients;
+using OpenTelemetry.Demo.Public.Contracts.Models;
+using OpenTelemetry.Demo.Public.Contracts.Options;
 
 namespace OpenTelemetry.Demo.Users.WebApi.Controllers
 {
@@ -12,25 +22,48 @@ namespace OpenTelemetry.Demo.Users.WebApi.Controllers
     {
         private static readonly ActivitySource Activity = new(nameof(UsersController));
         private static readonly TextMapPropagator Propagator = Propagators.DefaultTextMapPropagator;
+        private readonly DatasourceOptions _datasourceOptions;
+        private readonly ILegislationsClient _legislationsClient;
         private readonly ILogger<UsersController> _logger;
 
-        public UsersController(ILogger<UsersController> logger)
+        public UsersController([NotNull] IOptionsMonitor<DatasourceOptions> datasourceOptions, [NotNull] ILegislationsClient legislationsClient, ILogger<UsersController> logger)
         {
+            _datasourceOptions = datasourceOptions.CurrentValue;
+            _legislationsClient = legislationsClient;
             _logger = logger;
         }
 
         [HttpGet]
-        public UserResponseDto GetUser(int userId)
+        public async Task<UserResponseDto> GetUser(int userId)
         {
+            UserEntity userEntity;
+            
+            using (SqlConnection connection = new SqlConnection(
+                _datasourceOptions.ConnectionString))
+            {
+                var response = await connection.QueryAsync<UserEntity>(
+                    "SELECT user_Id AS UserID, username AS Username, email AS [Email] FROM dbo.USERS WITH(NOLOCK) WHERE user_id = @UserId", new {UserId = userId});
+
+                userEntity = response.FirstOrDefault();
+            }
+
+            var legislationsResponse = await _legislationsClient.GetLegislationAsync(userEntity.UserId);
+            
             using (var activity = Activity.StartActivity("GetUser", ActivityKind.Server))
             {
                 AddActivityToHeader(activity);
-
-                return new UserResponseDto
+                Thread.Sleep(5000);
+                
+                if (userEntity != null)
                 {
-                    Username = "Marco",
-                    UserId = 666
-                };
+                    return new UserResponseDto
+                    {
+                        UserId = userEntity.UserId,
+                        Username = userEntity.Username
+                    };   
+                }
+
+                return null;
             }
         }
 
