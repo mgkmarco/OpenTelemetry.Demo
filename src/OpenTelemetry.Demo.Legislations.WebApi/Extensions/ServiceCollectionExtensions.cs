@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Demo.Public.Contracts.Options;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using StackExchange.Redis;
@@ -34,6 +35,16 @@ namespace OpenTelemetry.Demo.Legislations.WebApi.Extensions
                         opts.AgentHost = jaegerOptions.AgentHost;
                         opts.AgentPort = jaegerOptions.AgentPort;
                     });
+            });
+            
+            // Add Metrics 
+            services.AddSingleton(builder =>
+            {
+                return Sdk
+                    .CreateMeterProviderBuilder()
+                    .AddSource("OpenTelemetry.Demo.Legislations.WebApi")
+                    .AddPrometheusExporter(opt => opt.Url = $"http://localhost:9090/test/metrics")
+                    .Build();
             });
         }
     }

@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using OpenTelemetry.Demo.Public.Contracts.Clients;
 using OpenTelemetry.Demo.Public.Contracts.Options;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Refit;
 
 namespace OpenTelemetry.Demo.Users.WebApi.Extensions
 {
@@ -21,7 +22,7 @@ namespace OpenTelemetry.Demo.Users.WebApi.Extensions
                 DatasourceOptions.DatasourceOptionsKey));
 
             var connection = new SqlConnection(datasourceOptions.ConnectionString);
-            System.Diagnostics.Debug.WriteLine(connection);
+            Debug.WriteLine(connection);
             var evolve = new Evolve.Evolve(connection)
             {
                 EmbeddedResourceAssemblies = new[] { typeof(Startup).Assembly },
@@ -40,14 +41,15 @@ namespace OpenTelemetry.Demo.Users.WebApi.Extensions
                 {
                     httpClient.BaseAddress = new Uri(legislationsClientOptions.Endpoint);
                 })
-                .AddTypedClient(Refit.RestService.For<ILegislationsClient>);
+                .AddTypedClient(RestService.For<ILegislationsClient>);
         }
         
         public static void AddOpenTelemetry(this IServiceCollection services, IConfiguration configuration)
         {
             var jaegerOptions = new JaegerOptions();
             configuration.GetSection(JaegerOptions.JaegerOptionsKey).Bind(jaegerOptions);
-            
+
+            //Add Tracing 
             services.AddOpenTelemetryTracing(builder => 
             {
                 builder.AddAspNetCoreInstrumentation()
@@ -60,6 +62,16 @@ namespace OpenTelemetry.Demo.Users.WebApi.Extensions
                         opts.AgentHost = jaegerOptions.AgentHost;
                         opts.AgentPort = jaegerOptions.AgentPort;
                     });
+            });
+
+            // Add Metrics 
+            services.AddSingleton(builder =>
+            {
+                return Sdk
+                    .CreateMeterProviderBuilder()
+                    .AddSource("OpenTelemetry.Demo.Users.WebApi")
+                    .AddPrometheusExporter(opt => opt.Url = $"http://localhost:9090/test/metrics")
+                    .Build();
             });
         }
     }

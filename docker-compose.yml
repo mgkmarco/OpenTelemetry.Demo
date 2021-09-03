@@ -3,6 +3,10 @@ version: '3.4'
 networks:
   open-telemetry:
     name: custom-network
+    
+volumes:
+  rabbitmq-prometheus_prometheus:
+  rabbitmq-prometheus_grafana:
 
 services:
   jaeger:
@@ -41,6 +45,28 @@ services:
       - 6379:6379
     networks:
       - open-telemetry
+        
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - open-telemetry
+    volumes:
+      - rabbitmq-prometheus_prometheus:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - open-telemetry
+    volumes:
+      - rabbitmq-prometheus_grafana:/var/lib/grafana
+      - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dotnet.yaml
+      - ./grafana/datasources.yml:/etc/grafana/provisioning/datasources/prometheus.yaml
+      - ./grafana/dashboards:/dashboards
 
   userswebapi:
     container_name: userswebapi
@@ -56,6 +82,7 @@ services:
       - jaeger
       - usersDb
       - legislationswebapi
+      - prometheus
     environment:
       JaegerExporter__AgentHost: jaeger
       JaegerExporter__AgentPort: 6831
