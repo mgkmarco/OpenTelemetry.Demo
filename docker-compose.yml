@@ -2,8 +2,7 @@ version: '3.4'
 
 networks:
   open-telemetry:
-    name: custom-network
-    
+
 volumes:
   rabbitmq-prometheus_prometheus:
   rabbitmq-prometheus_grafana:
@@ -64,16 +63,18 @@ services:
       - open-telemetry
     volumes:
       - rabbitmq-prometheus_grafana:/var/lib/grafana
-      - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dotnet.yaml
+      - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/prometheus-dotnet-aspcore.yaml
       - ./grafana/datasources.yml:/etc/grafana/provisioning/datasources/prometheus.yaml
       - ./grafana/dashboards:/dashboards
 
   userswebapi:
     container_name: userswebapi
-    image: ${DOCKER_REGISTRY-}opentelemetry.demo.users.webapi
+    hostname: userswebapi
+    image: userswebapi
     build:
       context: .
       dockerfile: src/OpenTelemetry.Demo.Users.WebApi/Dockerfile
+    restart: unless-stopped
     ports:
       - "5000:80"
     networks:
@@ -86,14 +87,17 @@ services:
     environment:
       JaegerExporter__AgentHost: jaeger
       JaegerExporter__AgentPort: 6831
+      LegislationsClient__Endpoint: http://legislationswebapi:80
       Datasource__ConnectionString: Server=usersDb;Database=UsersStore;Integrated Security=False;User ID=sqlserver;Password=Password123!;Application Name=UsersService;ConnectRetryCount=5;ConnectRetryInterval=5;
       
   legislationswebapi:
-    container_name: legislationsswebapi
-    image: ${DOCKER_REGISTRY-}opentelemetry.demo.legislations.webapi
+    container_name: legislationswebapi
+    hostname: legislationswebapi
+    image: legislationswebapi
     build:
       context: .
       dockerfile: src/OpenTelemetry.Demo.Legislations.WebApi/Dockerfile
+    restart: unless-stopped
     ports:
       - "6000:80"
     networks:

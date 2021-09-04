@@ -1,10 +1,10 @@
 apiVersion: 1
 
 providers:
- - name: 'dotnet'
+ - name: 'prometheus'
    orgId: 1
    folder: ''
    type: file
-   disableDeletion: true
+   disableDeletion: false
    options:
      path: /dashboards

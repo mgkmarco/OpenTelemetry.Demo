@@ -1,14 +1,18 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using OpenTelemetry.Demo.Users.WebApi.Extensions;
+using Prometheus;
 
 namespace OpenTelemetry.Demo.Users.WebApi
 {
     public class Startup
     {
+        public static IDisposable Collector;
+        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -38,10 +42,18 @@ namespace OpenTelemetry.Demo.Users.WebApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            
+            //Prometheus Http Metrics
+            app.UseHttpMetrics();
+                
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                //Prometheus Base Metrics
+                endpoints.MapMetrics();
+                endpoints.MapControllers();
+            });
         }
     }
 }

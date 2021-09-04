@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using OpenTelemetry.Demo.Legislations.WebApi.Extensions;
-using OpenTelemetry.Demo.Public.Contracts.Options;
+using Prometheus;
 
 namespace OpenTelemetry.Demo.Legislations.WebApi
 {
@@ -38,12 +38,19 @@ namespace OpenTelemetry.Demo.Legislations.WebApi
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "OpenTelemetry.Demo.Legislations.WebApi v1"));
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
+            
+            //Prometheus Http Metrics
+            app.UseHttpMetrics();
+            
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                //Prometheus Base Metrics
+                endpoints.MapMetrics();
+                endpoints.MapControllers();
+            });
         }
     }
 }

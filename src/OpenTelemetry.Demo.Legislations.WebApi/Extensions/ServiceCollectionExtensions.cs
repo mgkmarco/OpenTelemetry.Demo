@@ -36,16 +36,6 @@ namespace OpenTelemetry.Demo.Legislations.WebApi.Extensions
                         opts.AgentPort = jaegerOptions.AgentPort;
                     });
             });
-            
-            // Add Metrics 
-            services.AddSingleton(builder =>
-            {
-                return Sdk
-                    .CreateMeterProviderBuilder()
-                    .AddSource("OpenTelemetry.Demo.Legislations.WebApi")
-                    .AddPrometheusExporter(opt => opt.Url = $"http://localhost:9090/test/metrics")
-                    .Build();
-            });
         }
     }
 }
