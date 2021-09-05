@@ -36,6 +36,46 @@ services:
       - "5333:1433"
     networks:
       - open-telemetry
+      
+  rmq0: &rabbitmq
+    image: rabbit-management-decompression
+    networks:
+        - open-telemetry
+    build:
+      context: ./rabbitmq
+      args:
+        - definitions=trd_definitions.json
+      dockerfile: Dockerfile
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+      - "15692:15692"
+    hostname: rmq0
+    environment:
+      rabbitmq_erlang_cookie: open-telemetry
+    volumes:
+      - ./rabbitmq/rabbitmq-overview.conf:/etc/rabbitmq/rabbitmq.conf:ro      
+    restart: on-failure
+  
+  rmq1:
+    << : *rabbitmq
+    hostname: rmq1
+    ports:
+      - "15674:15672"
+      - "5674:5672"      
+      - "15694:15692"
+    depends_on:
+      - rmq0      
+      
+  rmq2:
+    << : *rabbitmq
+    hostname: rmq2
+    ports:
+      - "15675:15672"
+      - "5675:5672"      
+      - "15695:15692"
+    depends_on:
+      - rmq1
 
   redis:
     image: redis:6.2.1
@@ -61,7 +101,7 @@ services:
       - open-telemetry
     volumes:
       - rabbitmq-prometheus_prometheus:/prometheus
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     
   grafana:
     image: grafana/grafana

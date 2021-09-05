@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using EasyNetQ;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Demo.Public.Contracts.Options;
-using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using StackExchange.Redis;
@@ -10,6 +10,26 @@ namespace OpenTelemetry.Demo.Legislations.WebApi.Extensions
 {
     public static class ServiceCollectionExtensions
     {
+        public static void AddMessageBus(this IServiceCollection services, IConfiguration configuration)
+        {
+            var rabbitOptions = new RabbitOptions();
+            configuration.GetSection(RabbitOptions.RabbitOptionsKey).Bind(rabbitOptions);
+            var connectionString = "host=";
+
+            for (int i = 0; i < rabbitOptions.Hosts.Count; i++)
+            {
+                if (i == 0)
+                {
+                    connectionString += $"{rabbitOptions.Hosts[i]}";
+                    break;
+                }
+
+                connectionString += $",{rabbitOptions.Hosts[i]}";
+            }
+            
+            services.AddSingleton(RabbitHutch.CreateBus(connectionString).Advanced);
+        }
+        
         public static void AddOpenTelemetry(this IServiceCollection services, IConfiguration configuration)
         {
             var jaegerOptions = new JaegerOptions();

@@ -1,0 +1,7062 @@
+{
+	"rabbit_version": "3.8.9",
+	"rabbitmq_version": "3.8.9",
+	"product_name": "RabbitMQ",
+	"product_version": "3.8.9",
+	"users": [
+		{
+			"name": "lbmonitor",
+			"password_hash": "wvo0q7z7Zx2xbs0dhGOJntE/veTlA15Pxq8qMMY154OHJxzp",
+			"hashing_algorithm": "rabbit_password_hashing_sha256",
+			"tags": "monitoring"
+		},
+		{
+			"name": "splunk",
+			"password_hash": "7uS4KnVuU8O9N0UCQoKhqmzW4YH4RAVzhAYiWJh5DeYjBihi",
+			"hashing_algorithm": "rabbit_password_hashing_sha256",
+			"tags": "monitoring"
+		},
+		{
+			"name": "sbshovel",
+			"password_hash": "Lco4PNVZvDIKbTz5o28Pc5gThMB4KmQ04bzB9+XgsTZED93i",
+			"hashing_algorithm": "rabbit_password_hashing_sha256",
+			"tags": "administrator"
+		},
+		{
+			"name": "sbdev",
+			"password_hash": "WwbGSbIaYKsAg63u2atohQ4mc134PqfvdzHIOxmpfJEa/nRF",
+			"hashing_algorithm": "rabbit_password_hashing_sha256",
+			"tags": "administrator"
+		},
+		{
+			"name": "guest",
+			"password_hash": "hEQTXaU6m0cujAwxZWc8bHZ60VXbJZ2arPVmDTDtGA0EjPSE",
+			"hashing_algorithm": "rabbit_password_hashing_sha256",
+			"tags": "administrator"
+		},
+		{
+			"name": "sbdevops",
+			"password_hash": "qw6luTUclL1WfmJW1cGMUT9D4uNPuoIuwDx/gGk33HLlru1q",
+			"hashing_algorithm": "rabbit_password_hashing_sha256",
+			"tags": "administrator"
+		}
+	],
+	"vhosts": [
+		{
+			"name": "sbprofile"
+		},
+		{
+			"name": "sbtrd"
+		},
+		{
+			"name": "/"
+		},
+		{
+			"name": "sbobg"
+		}
+	],
+	"permissions": [
+		{
+			"user": "sbdevops",
+			"vhost": "/",
+			"configure": ".*",
+			"write": ".*",
+			"read": ".*"
+		},
+		{
+			"user": "sbdev",
+			"vhost": "sbprofile",
+			"configure": ".*",
+			"write": ".*",
+			"read": ".*"
+		},
+		{
+			"user": "guest",
+			"vhost": "/",
+			"configure": ".*",
+			"write": ".*",
+			"read": ".*"
+		},
+		{
+			"user": "sbdev",
+			"vhost": "sbtrd",
+			"configure": ".*",
+			"write": ".*",
+			"read": ".*"
+		},
+		{
+			"user": "sbshovel",
+			"vhost": "sbobg",
+			"configure": ".*",
+			"write": ".*",
+			"read": ".*"
+		},
+		{
+			"user": "guest",
+			"vhost": "sbtrd",
+			"configure": ".*",
+			"write": ".*",
+			"read": ".*"
+		},
+		{
+			"user": "sbshovel",
+			"vhost": "/",
+			"configure": ".*",
+			"write": ".*",
+			"read": ".*"
+		},
+		{
+			"user": "sbdev",
+			"vhost": "/",
+			"configure": ".*",
+			"write": ".*",
+			"read": ".*"
+		},
+		{
+			"user": "sbshovel",
+			"vhost": "sbtrd",
+			"configure": ".*",
+			"write": ".*",
+			"read": ".*"
+		},
+		{
+			"user": "sbdevops",
+			"vhost": "sbtrd",
+			"configure": ".*",
+			"write": ".*",
+			"read": ".*"
+		},
+		{
+			"user": "sbdev",
+			"vhost": "sbobg",
+			"configure": ".*",
+			"write": ".*",
+			"read": ".*"
+		},
+		{
+			"user": "splunk",
+			"vhost": "sbtrd",
+			"configure": ".*",
+			"write": ".*",
+			"read": ".*"
+		}
+	],
+	"topic_permissions": [],
+	"parameters": [
+		{
+			"value": {
+				"ack-mode": "on-confirm",
+				"dest-add-forward-headers": false,
+				"dest-exchange": "bd.bigdata.receiver",
+				"dest-protocol": "amqp091",
+				"dest-uri": "amqp://sbshovel:sbshovel@sb-rabbit.qa.bde.local/sbtibd",
+				"src-delete-after": "never",
+				"src-prefetch-count": 1000,
+				"src-protocol": "amqp091",
+				"src-queue": "ti.toBigData",
+				"src-uri": "amqp://sbshovel:sbshovel@sb-trd-rabbit.qa.bde.local/sbtrd"
+			},
+			"vhost": "sbtrd",
+			"component": "shovel",
+			"name": "sbti => sbtibd"
+		},
+		{
+			"value": {
+				"ack-mode": "on-confirm",
+				"dest-add-forward-headers": false,
+				"dest-exchange": "sb.risk.topic.ss.exchange",
+				"dest-protocol": "amqp091",
+				"dest-uri": "amqp://sbshovel:sbshovel@sb-risk-rabbit.qa.bde.local/sbrisk",
+				"src-delete-after": "never",
+				"src-prefetch-count": 1000,
+				"src-protocol": "amqp091",
+				"src-queue": "ti.external.risk-hash2",
+				"src-uri": "amqp://sbshovel:sbshovel@sb-trd-rabbit.qa.bde.local/sbtrd"
+			},
+			"vhost": "sbtrd",
+			"component": "shovel",
+			"name": "\t sbti-ti.ext.risk-hash2-to-sbrisk-ss"
+		},
+		{
+			"value": {
+				"ack-mode": "on-confirm",
+				"dest-add-forward-headers": false,
+				"dest-add-timestamp-header": true,
+				"dest-exchange": "sb.isa.ss.ti.exchange",
+				"dest-protocol": "amqp091",
+				"dest-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqisarbt01.bde.local/sbed-ss",
+					"amqp://sbshovel:sbshovel@sto-sbqisarbt02.bde.local/sbed-ss",
+					"amqp://sbshovel:sbshovel@sto-sbqisarbt03.bde.local/sbed-ss"
+				],
+				"src-delete-after": "never",
+				"src-prefetch-count": 1000,
+				"src-protocol": "amqp091",
+				"src-queue": "ti.extension.eventdelivery-hash1",
+				"src-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt01.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt02.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt03.bde.local/sbtrd"
+				]
+			},
+			"vhost": "sbtrd",
+			"component": "shovel",
+			"name": "sbti-ti.ext.ed-hash1-to-sbed-ss"
+		},
+		{
+			"value": {
+				"ack-mode": "on-confirm",
+				"dest-add-forward-headers": false,
+				"dest-add-timestamp-header": true,
+				"dest-exchange": "sb.stream.ss.ti.exchange",
+				"dest-exchange-key": "#",
+				"dest-protocol": "amqp091",
+				"dest-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqisarbt01.bde.local/sbed-stream",
+					"amqp://sbshovel:sbshovel@sto-sbqisarbt02.bde.local/sbed-stream",
+					"amqp://sbshovel:sbshovel@sto-sbqisarbt03.bde.local/sbed-stream"
+				],
+				"src-delete-after": "never",
+				"src-prefetch-count": 1000,
+				"src-protocol": "amqp091",
+				"src-queue": "ti.extension.eventdelivery.stream",
+				"src-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt01.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt02.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt03.bde.local/sbtrd"
+				]
+			},
+			"vhost": "sbtrd",
+			"component": "shovel",
+			"name": "sbti => sbed.stream"
+		},
+		{
+			"value": {
+				"ack-mode": "on-confirm",
+				"dest-add-forward-headers": false,
+				"dest-exchange": "trading.output",
+				"dest-protocol": "amqp091",
+				"dest-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqintrbt01.bde.local/sbint",
+					"amqp://sbshovel:sbshovel@sto-sbqintrbt02.bde.local/sbint",
+					"amqp://sbshovel:sbshovel@sto-sbqintrbt03.bde.local/sbint"
+				],
+				"src-delete-after": "never",
+				"src-protocol": "amqp091",
+				"src-queue": "ti.extension.integration-hash1",
+				"src-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt01.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt02.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt03.bde.local/sbtrd"
+				]
+			},
+			"vhost": "sbtrd",
+			"component": "shovel",
+			"name": "Trading to Integration 1"
+		},
+		{
+			"value": {
+				"ack-mode": "on-confirm",
+				"dest-add-forward-headers": false,
+				"dest-exchange": "tt.ex.fromTI.inbound",
+				"dest-protocol": "amqp091",
+				"dest-uri": "amqp://sbshovel:sbshovel@sb-trt-rabbit2.qa.bde.local/sbtt",
+				"src-delete-after": "never",
+				"src-prefetch-count": 1000,
+				"src-protocol": "amqp091",
+				"src-queue": "ti.extension.tradingtool",
+				"src-uri": "amqp://sbshovel:sbshovel@sb-trd-rabbit.qa.bde.local/sbtrd"
+			},
+			"vhost": "sbtrd",
+			"component": "shovel",
+			"name": "sbtrd-to-sbtt"
+		},
+		{
+			"value": {
+				"dest-exchange": "bet.rts.marketsettlement.ch.inbound",
+				"dest-protocol": "amqp091",
+				"dest-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqcomrbt01.bde.local/sbbet",
+					"amqp://sbshovel:sbshovel@sto-sbqcomrbt02.bde.local/sbbet",
+					"amqp://sbshovel:sbshovel@sto-sbqcomrbt03.bde.local/sbbet"
+				],
+				"src-protocol": "amqp091",
+				"src-queue": "ti.extension.bettingsubscriber",
+				"src-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt01.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt02.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt03.bde.local/sbtrd"
+				]
+			},
+			"vhost": "sbtrd",
+			"component": "shovel",
+			"name": "sbti.bettingsubscriber=>sbbet.marketsettlement"
+		},
+		{
+			"value": {
+				"ack-mode": "on-confirm",
+				"dest-add-forward-headers": false,
+				"dest-add-timestamp-header": true,
+				"dest-exchange": "sb.isa.ss.ti.exchange",
+				"dest-protocol": "amqp091",
+				"dest-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqisarbt01.bde.local/sbed-ss",
+					"amqp://sbshovel:sbshovel@sto-sbqisarbt02.bde.local/sbed-ss",
+					"amqp://sbshovel:sbshovel@sto-sbqisarbt03.bde.local/sbed-ss"
+				],
+				"src-delete-after": "never",
+				"src-prefetch-count": 1000,
+				"src-protocol": "amqp091",
+				"src-queue": "ti.extension.eventdelivery-hash5",
+				"src-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt01.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt02.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt03.bde.local/sbtrd"
+				]
+			},
+			"vhost": "sbtrd",
+			"component": "shovel",
+			"name": "sbti-ti.ext.ed-hash5-to-sbed-ss"
+		},
+		{
+			"value": {
+				"ack-mode": "on-confirm",
+				"dest-add-forward-headers": false,
+				"dest-add-timestamp-header": true,
+				"dest-exchange": "sb.isa.ss.ti.exchange",
+				"dest-protocol": "amqp091",
+				"dest-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqisarbt01.bde.local/sbed-ss",
+					"amqp://sbshovel:sbshovel@sto-sbqisarbt02.bde.local/sbed-ss",
+					"amqp://sbshovel:sbshovel@sto-sbqisarbt03.bde.local/sbed-ss"
+				],
+				"src-delete-after": "never",
+				"src-prefetch-count": 1000,
+				"src-protocol": "amqp091",
+				"src-queue": "ti.extension.eventdelivery-hash2",
+				"src-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt01.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt02.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt03.bde.local/sbtrd"
+				]
+			},
+			"vhost": "sbtrd",
+			"component": "shovel",
+			"name": "sbti-ti.ext.ed-hash2-to-sbed-ss"
+		},
+		{
+			"value": {
+				"ack-mode": "on-confirm",
+				"dest-add-forward-headers": false,
+				"dest-add-timestamp-header": true,
+				"dest-exchange": "sb.betbuilder.integration.ss.source.exchange",
+				"dest-protocol": "amqp091",
+				"dest-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqisarbt01.bde.local/sbed-btb",
+					"amqp://sbshovel:sbshovel@sto-sbqisarbt02.bde.local/sbed-btb",
+					"amqp://sbshovel:sbshovel@sto-sbqisarbt03.bde.local/sbed-btb"
+				],
+				"src-delete-after": "never",
+				"src-prefetch-count": 1000,
+				"src-protocol": "amqp091",
+				"src-queue": "ti.extension.eventdelivery.betbuilder",
+				"src-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt01.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt02.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt03.bde.local/sbtrd"
+				]
+			},
+			"vhost": "sbtrd",
+			"component": "shovel",
+			"name": "sbti-bb -> sbed-bb"
+		},
+		{
+			"value": {
+				"ack-mode": "on-confirm",
+				"dest-add-forward-headers": false,
+				"dest-exchange": "sb.risk.topic.ss.exchange",
+				"dest-protocol": "amqp091",
+				"dest-uri": "amqp://sbshovel:sbshovel@sb-risk-rabbit.qa.bde.local/sbrisk",
+				"src-delete-after": "never",
+				"src-prefetch-count": 1000,
+				"src-protocol": "amqp091",
+				"src-queue": "ti.external.risk-hash1",
+				"src-uri": "amqp://sbshovel:sbshovel@sb-trd-rabbit.qa.bde.local/sbtrd"
+			},
+			"vhost": "sbtrd",
+			"component": "shovel",
+			"name": "sbti-ti.ext.risk-hash1-to-sbrisk-ss"
+		},
+		{
+			"value": {
+				"ack-mode": "on-confirm",
+				"dest-add-forward-headers": false,
+				"dest-exchange": "sb.bethistory.from.ti.exchange",
+				"dest-protocol": "amqp091",
+				"dest-uri": "amqp://sbshovel:sbshovel@sb-rabbit.qa.bde.local/sbbet",
+				"src-delete-after": "never",
+				"src-prefetch-count": 1000,
+				"src-protocol": "amqp091",
+				"src-queue": "ti.extension.bethistory-hash1",
+				"src-uri": "amqp://sbshovel:sbshovel@sb-trd-rabbit.qa.bde.local/sbtrd"
+			},
+			"vhost": "sbtrd",
+			"component": "shovel",
+			"name": "sbti-to-sbbethistory-hash1"
+		},
+		{
+			"value": {
+				"ack-mode": "on-confirm",
+				"dest-add-forward-headers": false,
+				"dest-exchange": "sb.ex.watcher.streamgenerator.inbound",
+				"dest-protocol": "amqp091",
+				"dest-uri": "amqp://sbshovel:sbshovel@sb-trt-rabbit2.qa.bde.local/sbwatcher",
+				"src-delete-after": "never",
+				"src-prefetch-count": 1000,
+				"src-protocol": "amqp091",
+				"src-queue": "ti.external.tt-watcher",
+				"src-uri": "amqp://sbshovel:sbshovel@sb-trd-rabbit.qa.bde.local/sbtrd"
+			},
+			"vhost": "sbtrd",
+			"component": "shovel",
+			"name": "sbtrd-to-sbwatcher2"
+		},
+		{
+			"value": {
+				"ack-mode": "on-confirm",
+				"dest-add-forward-headers": false,
+				"dest-add-timestamp-header": true,
+				"dest-exchange": "bet.cashout.mds.updates",
+				"dest-protocol": "amqp091",
+				"dest-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqcomrbt01.bde.local/sbbet",
+					"amqp://sbshovel:sbshovel@sto-sbqcomrbt02.bde.local/sbbet",
+					"amqp://sbshovel:sbshovel@sto-sbqcomrbt03.bde.local/sbbet"
+				],
+				"src-delete-after": "never",
+				"src-prefetch-count": 1000,
+				"src-protocol": "amqp091",
+				"src-queue": "ti.extension.betting",
+				"src-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt01.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt02.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt03.bde.local/sbtrd"
+				]
+			},
+			"vhost": "sbtrd",
+			"component": "shovel",
+			"name": "sbti-to-sbcashout"
+		},
+		{
+			"value": {
+				"ack-mode": "on-confirm",
+				"dest-add-forward-headers": false,
+				"dest-add-timestamp-header": true,
+				"dest-exchange": "sb.isa.ss.ti.exchange",
+				"dest-protocol": "amqp091",
+				"dest-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqisarbt01.bde.local/sbed-ss",
+					"amqp://sbshovel:sbshovel@sto-sbqisarbt02.bde.local/sbed-ss",
+					"amqp://sbshovel:sbshovel@sto-sbqisarbt03.bde.local/sbed-ss"
+				],
+				"src-delete-after": "never",
+				"src-prefetch-count": 1000,
+				"src-protocol": "amqp091",
+				"src-queue": "ti.extension.eventdelivery-hash4",
+				"src-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt01.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt02.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt03.bde.local/sbtrd"
+				]
+			},
+			"vhost": "sbtrd",
+			"component": "shovel",
+			"name": "sbti-ti.ext.ed-hash4-to-sbed-ss"
+		},
+		{
+			"value": {
+				"ack-mode": "on-confirm",
+				"dest-add-forward-headers": false,
+				"dest-exchange": "ti.marketengine.secondary",
+				"dest-protocol": "amqp091",
+				"dest-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt01.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt02.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt03.bde.local/sbtrd"
+				],
+				"src-delete-after": "never",
+				"src-prefetch-count": 1000,
+				"src-protocol": "amqp091",
+				"src-queue": "ti.marketengine.output.secondary",
+				"src-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt01.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt02.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt03.bde.local/sbtrd"
+				]
+			},
+			"vhost": "sbtrd",
+			"component": "shovel",
+			"name": "ME => Secondary"
+		},
+		{
+			"value": {
+				"ack-mode": "on-confirm",
+				"dest-add-forward-headers": false,
+				"dest-add-timestamp-header": true,
+				"dest-exchange": "sb.isa.ss.ti.exchange",
+				"dest-protocol": "amqp091",
+				"dest-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqisarbt01.bde.local/sbed-ss",
+					"amqp://sbshovel:sbshovel@sto-sbqisarbt02.bde.local/sbed-ss",
+					"amqp://sbshovel:sbshovel@sto-sbqisarbt03.bde.local/sbed-ss"
+				],
+				"src-delete-after": "never",
+				"src-prefetch-count": 1000,
+				"src-protocol": "amqp091",
+				"src-queue": "ti.extension.eventdelivery-hash3",
+				"src-uri": [
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt01.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt02.bde.local/sbtrd",
+					"amqp://sbshovel:sbshovel@sto-sbqtrdrbt03.bde.local/sbtrd"
+				]
+			},
+			"vhost": "sbtrd",
+			"component": "shovel",
+			"name": "sbti-ti.ext.ed-hash3-to-sbed-ss"
+		},
+		{
+			"value": {
+				"ack-mode": "on-confirm",
+				"dest-add-forward-headers": false,
+				"dest-exchange": "sb.obg.source.fanout.exchange",
+				"dest-protocol": "amqp091",
+				"dest-uri": "amqp://sbshovel:sbshovel@sb-ext-rabbit.qa.bde.local/sbobg",
+				"src-delete-after": "never",
+				"src-prefetch-count": 1000,
+				"src-protocol": "amqp091",
+				"src-queue": "ti.extension.obg",
+				"src-uri": "amqp://sbshovel:sbshovel@sb-trd-rabbit.qa.bde.local/sbtrd"
+			},
+			"vhost": "sbtrd",
+			"component": "shovel",
+			"name": "sbti => sbobg"
+		}
+	],
+	"global_parameters": [
+		{
+			"name": "cluster_name",
+			"value": "rabbit@sto-sbqtrdrbt.qa.bde.local"
+		},
+		{
+			"name": "internal_cluster_id",
+			"value": "rabbitmq-cluster-id-7c-xQo3KOm-TFR5zDR1oZA"
+		}
+	],
+	"policies": [
+		{
+			"vhost": "sbtrd",
+			"name": "sbtrd-autodelete-policy",
+			"pattern": "^ti\\.([^.]+\\.)*autodelete(\\.[^.]+)*",
+			"apply-to": "all",
+			"definition": {
+				"queue-master-locator": "random"
+			},
+			"priority": 1
+		},
+		{
+			"vhost": "sbtrd",
+			"name": "sbtrd-queues-policy",
+			"pattern": "^ti\\.",
+			"apply-to": "queues",
+			"definition": {
+				"ha-mode": "exactly",
+				"ha-params": 2,
+				"ha-promote-on-failure": "when-synced",
+				"ha-sync-batch-size": 6144,
+				"ha-sync-mode": "automatic",
+				"queue-master-locator": "random"
+			},
+			"priority": 0
+		},
+		{
+			"vhost": "/",
+			"name": "root-ha-policy",
+			"pattern": "^ha\\.",
+			"apply-to": "all",
+			"definition": {
+				"ha-mode": "exactly",
+				"ha-params": 2,
+				"ha-sync-mode": "automatic",
+				"queue-master-locator": "min-masters"
+			},
+			"priority": 0
+		}
+	],
+	"queues": [
+		{
+			"name": "ti.marketupdatedispatcher.consistenthash.inbound.controller",
+			"vhost": "sbprofile",
+			"durable": false,
+			"auto_delete": true,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketupdatedispatcher.inbound-hash1",
+			"vhost": "sbprofile",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash34",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash1",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.engine.settings-hash3",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash7",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash1",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.mapping.main.autodelete.inbound-PKWmNqveRjuPRGo6VcmQqA",
+			"vhost": "sbtrd",
+			"durable": false,
+			"auto_delete": true,
+			"arguments": {}
+		},
+		{
+			"name": "goma.test.q",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-queue-type": "classic"
+			}
+		},
+		{
+			"name": "ti.external.tt-watcher",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash21",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.settings-hash8",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash7",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.statisticsengine.inbound-hash6",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.publishers-hash3",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-queue-type": "classic"
+			}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash45",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.betbuildercontent-hash8",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.betbuildercontent-hash3",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash8",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.trading.marketviewer.inbound-hash5",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.tradingtemplate.autodelete.inbound-yWb1eojdRPSaa5NxvLzuAQ",
+			"vhost": "sbtrd",
+			"durable": false,
+			"auto_delete": true,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash41",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.settings-hash5",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.publishers-hash4",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-queue-type": "classic"
+			}
+		},
+		{
+			"name": "ti.extension.tradingtool",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.trading.marketviewer.inbound-hash4",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash32",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.engine.legacyR-hash37",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash56",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash17",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash12",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.settings-hash12",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash20",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.statisticsengine.inbound-hash8",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash15",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash24",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash19",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.publishers-hash2",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-queue-type": "classic"
+			}
+		},
+		{
+			"name": "ti.marketupdatedispatcher.inbound-hash1",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash26",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash18",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash5",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash55",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.publishers-hash1",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-queue-type": "classic"
+			}
+		},
+		{
+			"name": "ti.sif.fixtureimport.dlq",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-queue-type": "classic"
+			}
+		},
+		{
+			"name": "ti.category.clearcache.autodelete.in-8iDLFTg4Q0aMuNn8xgCOhA",
+			"vhost": "sbtrd",
+			"durable": false,
+			"auto_delete": true,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash36",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash64",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.external.risk-hash2",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash28",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash23",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.trading.marketviewer.inbound-hash1",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash9",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash57",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash33",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash50",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash16",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash12",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash3",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash24",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash3",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.engine.legacyR-hash7",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.engine.legacyR-hash31",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash46",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.trading.marketviewer.inbound-hash2",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash62",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.phaseswitch.receiver.inbound-hash1",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash48",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.extension.eventdelivery-hash4",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.sif.fixtureimport.inbound-hash1",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-dead-letter-exchange": "ti.sif.fixtureimport.dlx",
+				"x-queue-type": "classic"
+			}
+		},
+		{
+			"name": "ti.engine.legacyR-hash39",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.trading.marketviewer.inbound-hash8",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.toBigData",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.statisticsengine.inbound-hash1",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash16",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.subscriber.betbuildercontent-hash1",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash6",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.statisticsengine.inbound-hash3",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash8",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.extension.betting",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash13",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.settings-hash11",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash10",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash29",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash13",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.statistics.sbdbsubcriber.inbound-hash1",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash2",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash32",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash11",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.statisticsengine.inbound-hash7",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash52",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.cache.autodelete.trading.marketviewer.inbound-4c52cf9a-210a-4e07-a822-c88c6da70aea",
+			"vhost": "sbtrd",
+			"durable": false,
+			"auto_delete": true,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash23",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash25",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.betbuildercontent-hash4",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.trading.marketviewer.consistenthash.inbound.controller",
+			"vhost": "sbtrd",
+			"durable": false,
+			"auto_delete": true,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.consistenthash.controller",
+			"vhost": "sbtrd",
+			"durable": false,
+			"auto_delete": true,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash37",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash58",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash33",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash4",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "test.ti.daniel",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-queue-type": "classic"
+			}
+		},
+		{
+			"name": "ti.cache.autodelete.trading.marketviewer.inbound-30577c64-66e8-40ee-a6f4-3f80e2bf9b20",
+			"vhost": "sbtrd",
+			"durable": false,
+			"auto_delete": true,
+			"arguments": {}
+		},
+		{
+			"name": "ti.extension.bethistory-hash1",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.category.clearcache.autodelete.in-oYTqSj_mSP6wiauVK1AC0A",
+			"vhost": "sbtrd",
+			"durable": false,
+			"auto_delete": true,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash38",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash13",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash35",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.engine.settings-hash7",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash28",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.trading.marketviewer.inbound-hash3",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash39",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.trading.bettingsubscriber.inbound-hash1",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash34",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.engine.settings-hash9",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash9",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.engine.legacyR-hash14",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.engine.legacyR-hash40",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "test.ti.profilemanagementautotest",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-queue-type": "classic"
+			}
+		},
+		{
+			"name": "ti.cache.autodelete.trading.marketviewer.inbound-97fa442b-ae65-425f-ae0e-1374f10b7c9a",
+			"vhost": "sbtrd",
+			"durable": false,
+			"auto_delete": true,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.betbuildercontent-hash2",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketsettings.sqlpersistor.input",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.output.secondary",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-queue-type": "classic"
+			}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash59",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.betbuildercontent-hash6",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.settings-hash10",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.cache.autodelete.trading.marketviewer.inbound-932cbf5f-8ae1-4b4d-baff-eb16fdfeeb8e",
+			"vhost": "sbtrd",
+			"durable": false,
+			"auto_delete": true,
+			"arguments": {}
+		},
+		{
+			"name": "ti.statisticsengine.inbound-hash5",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash6",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash20",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash21",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.cache.autodelete.trading.marketviewer.inbound-5db90bd8-d0d9-4c97-b965-f1259de514c4",
+			"vhost": "sbtrd",
+			"durable": false,
+			"auto_delete": true,
+			"arguments": {}
+		},
+		{
+			"name": "ti.external.risk-hash1",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash5",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.extension.eventdelivery-hash2",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.mapping.main.autodelete.inbound-F9MjRffQRFqc6su_5JrrTg",
+			"vhost": "sbtrd",
+			"durable": false,
+			"auto_delete": true,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.settings-hash2",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash31",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash18",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.phaseswitch.receiver.inbound-hash3",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash21",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "test.ti.marketengineautotest",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-queue-type": "classic"
+			}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash60",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.extension.eventdelivery-hash3",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash6",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash27",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash15",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.extension.eventdelivery-hash5",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.extension.obg",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.trading.api.autodelete.inbound-lXEPVcBbT5uXMTMbVGyIlQ",
+			"vhost": "sbtrd",
+			"durable": false,
+			"auto_delete": true,
+			"arguments": {}
+		},
+		{
+			"name": "ti.extension.eventdelivery-hash1",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.settings-hash6",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "test.ti.dynamicmarkettag",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-queue-type": "classic"
+			}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash49",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash35",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.tradingtemplate.autodelete.inbound-s7bV1KpmTSmPXaxjUlBJ8A",
+			"vhost": "sbtrd",
+			"durable": false,
+			"auto_delete": true,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash63",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash5",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash53",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketupdatedispatcher.consistenthash.inbound.controller",
+			"vhost": "sbtrd",
+			"durable": false,
+			"auto_delete": true,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash19",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash17",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.extension.eventdelivery.stream",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.trading.marketviewer.inbound-hash6",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash11",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.statistics.sbdbsubcriber.inbound-hash2",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "jalo-test",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-queue-type": "classic"
+			}
+		},
+		{
+			"name": "test.trd.mgk",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-queue-type": "classic"
+			}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash22",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash14",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash3",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash10",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.publishers-hash5",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-queue-type": "classic"
+			}
+		},
+		{
+			"name": "ti.engine.legacyR-hash30",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.engine.legacyR-hash4",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.engine.legacyR-hash29",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.engine.legacyR-hash2",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.engine.legacyR-hash22",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.extension.eventdelivery.betbuilder",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.statisticsengine.inbound-hash2",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.trading.marketviewer.inbound-hash7",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.settings-hash4",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.publishers.consistenthash.inbound.controller",
+			"vhost": "sbtrd",
+			"durable": false,
+			"auto_delete": true,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash27",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash1",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash10",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash4",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash11",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash26",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash42",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash40",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.statisticsengine.inbound-hash4",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.extension.bettingsubscriber",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.dlq",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash47",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash23",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash61",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.cache.autodelete.trading.marketviewer.inbound-be0d7782-93fc-47b6-a17e-3015f6943d4b",
+			"vhost": "sbtrd",
+			"durable": false,
+			"auto_delete": true,
+			"arguments": {}
+		},
+		{
+			"name": "ti.sif.fixtureimport.inbound-hash2",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-dead-letter-exchange": "ti.sif.fixtureimport.dlx",
+				"x-queue-type": "classic"
+			}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash14",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash25",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash9",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketsuspension.receiver.inbound",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash54",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash36",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.subscriber.betbuildercontent-hash7",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.cache.autodelete.trading.marketviewer.inbound-41d185b9-211f-4083-9280-de604ebc7a57",
+			"vhost": "sbtrd",
+			"durable": false,
+			"auto_delete": true,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash44",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash8",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.phaseswitch.receiver.inbound-hash2",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash22",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash30",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash43",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.betbuildercontent-hash5",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash38",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash16",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash12",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.engine.legacyR-hash15",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash18",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.settings-hash1",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash24",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash20",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.cache.autodelete.trading.marketviewer.inbound-71cfb287-cae7-4aa1-8fbc-5a676ea44431",
+			"vhost": "sbtrd",
+			"durable": false,
+			"auto_delete": true,
+			"arguments": {}
+		},
+		{
+			"name": "ti.edbr01.test",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-queue-type": "classic"
+			}
+		},
+		{
+			"name": "ti.phaseswitch.receiver.inbound-hash4",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash51",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.inbound-hash19",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscriber.SBDB-hash2",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.extension.integration-hash1",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR-hash17",
+			"vhost": "sbtrd",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {
+				"x-max-priority": 255
+			}
+		},
+		{
+			"name": "sb.obg.source.consumer.010",
+			"vhost": "sbobg",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "sb.obg.source.consumer.005",
+			"vhost": "sbobg",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "sb.obg.source.consumer.012",
+			"vhost": "sbobg",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "sb.obg.source.consumer.004",
+			"vhost": "sbobg",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "sb.obg.source.consumer.013",
+			"vhost": "sbobg",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "sb.obg.source.consumer.006",
+			"vhost": "sbobg",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "sb.obg.source.consumer.001",
+			"vhost": "sbobg",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "sb.obg.source.consumer.014",
+			"vhost": "sbobg",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "sb.obg.source.consumer.011",
+			"vhost": "sbobg",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "sb.obg.source.consumer.008",
+			"vhost": "sbobg",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "sb.obg.source.consumer.003",
+			"vhost": "sbobg",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "sb.obg.source.consumer.007",
+			"vhost": "sbobg",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "sb.obg.source.consumer.002",
+			"vhost": "sbobg",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		},
+		{
+			"name": "sb.obg.source.consumer.009",
+			"vhost": "sbobg",
+			"durable": true,
+			"auto_delete": false,
+			"arguments": {}
+		}
+	],
+	"exchanges": [
+		{
+			"name": "ti.profile.composer.inbound.all",
+			"vhost": "sbprofile",
+			"type": "fanout",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketupdatedispatcher.out",
+			"vhost": "sbprofile",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketupdatedispatcher.consistenthash.inbound",
+			"vhost": "sbprofile",
+			"type": "x-consistent-hash",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.profile.composer.outbound",
+			"vhost": "sbprofile",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketsettings.markettemplategrouping.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.settings.inbound",
+			"vhost": "sbtrd",
+			"type": "x-consistent-hash",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"type": "fanout",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.trading.market.api.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.category.all",
+			"vhost": "sbtrd",
+			"type": "fanout",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.gameaction.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.legacyengine.api.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.phaseswitch.receiver.consistenthash",
+			"vhost": "sbtrd",
+			"type": "x-consistent-hash",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.cache.trading.marketviewer.output",
+			"vhost": "sbtrd",
+			"type": "fanout",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.bunnycentral",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "trading.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.sif.fixtureimport.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.statisticsengine.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.trading.marketviewer.consistenthash.inbound",
+			"vhost": "sbtrd",
+			"type": "x-consistent-hash",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscribers.bbc-EvtId",
+			"vhost": "sbtrd",
+			"type": "x-consistent-hash",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {
+				"hash-header": "EventId"
+			}
+		},
+		{
+			"name": "ti.profile.manager.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketupdatedispatcher.consistenthash.inbound",
+			"vhost": "sbtrd",
+			"type": "x-consistent-hash",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.betbuildercontentsubscriber.out",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.tradingtemplate.api.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketupdatedispatcher.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.tradingtemplate.all",
+			"vhost": "sbtrd",
+			"type": "fanout",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.dlx",
+			"vhost": "sbtrd",
+			"type": "fanout",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketsuspension.job.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.fixturemapping",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.profile.resolver.inbound.all",
+			"vhost": "sbtrd",
+			"type": "fanout",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.external",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "integration.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.publishers.consistenthash.inbound",
+			"vhost": "sbtrd",
+			"type": "x-consistent-hash",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.category.inbound",
+			"vhost": "sbtrd",
+			"type": "fanout",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.secondary",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.sif.fixtureimport.consistenthash",
+			"vhost": "sbtrd",
+			"type": "x-consistent-hash",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.external.bethistory-hash",
+			"vhost": "sbtrd",
+			"type": "x-consistent-hash",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.trading.bettingsubscriber.consistenthash.inbound",
+			"vhost": "sbtrd",
+			"type": "x-consistent-hash",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {
+				"hash-header": "DefaultHashId"
+			}
+		},
+		{
+			"name": "ti.trading.api.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.trading.api.v1.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.fixturemapping.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.trading.api.inbound",
+			"vhost": "sbtrd",
+			"type": "fanout",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.external.ed-chash",
+			"vhost": "sbtrd",
+			"type": "x-consistent-hash",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.trading.marketviewer.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.adapter.betbuilder.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "trading.consistenthash.output",
+			"vhost": "sbtrd",
+			"type": "x-consistent-hash",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.market.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.adapters",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"type": "x-consistent-hash",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"type": "x-consistent-hash",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {
+				"hash-header": "MarketId"
+			}
+		},
+		{
+			"name": "ti.sif.fixtureimport.dlx",
+			"vhost": "sbtrd",
+			"type": "fanout",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.category.input",
+			"vhost": "sbtrd",
+			"type": "fanout",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.adapters.statistics",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.external.ed",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.odin.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.adapter.spso.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"type": "fanout",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.agnostic",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.testTrdCluster",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.mapping.main.in",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"type": "x-consistent-hash",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketupdate.job.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketupdatedispatcher.out",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.trading.risklimits.api.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.trading.bettingsubscriber.outbound",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.statistics.sbdbsubcriber.consistenthash",
+			"vhost": "sbtrd",
+			"type": "x-consistent-hash",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.trading.fixture.api.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.trading.market.api.all",
+			"vhost": "sbtrd",
+			"type": "fanout",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.publishers.all",
+			"vhost": "sbtrd",
+			"type": "fanout",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.statisticsengine.consistenthash",
+			"vhost": "sbtrd",
+			"type": "x-consistent-hash",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.phaseswitch.job.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.fromOldBG",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.betbuilder.mapping.api.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.category.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.testIntCluster",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.external.risk-hash",
+			"vhost": "sbtrd",
+			"type": "x-consistent-hash",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.snapper",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.marketsettings.sqlpersistor.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.trading.api.exclusive.inbound",
+			"vhost": "sbtrd",
+			"type": "fanout",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.engine.legacyR.output",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "ti.publishers",
+			"vhost": "sbtrd",
+			"type": "topic",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "tt.direct",
+			"vhost": "/",
+			"type": "direct",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "sb.obg.source.fanout.exchange",
+			"vhost": "sbobg",
+			"type": "fanout",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		},
+		{
+			"name": "sb.obg.source.consistenthash.exchange",
+			"vhost": "sbobg",
+			"type": "x-consistent-hash",
+			"durable": true,
+			"auto_delete": false,
+			"internal": false,
+			"arguments": {}
+		}
+	],
+	"bindings": [
+		{
+			"source": "ti.marketupdatedispatcher.consistenthash.inbound",
+			"vhost": "sbprofile",
+			"destination": "ti.marketupdatedispatcher.inbound-hash1",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.profile.composer.outbound",
+			"vhost": "sbprofile",
+			"destination": "ti.marketupdatedispatcher.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "profilesettingsupdated.*",
+			"arguments": {}
+		},
+		{
+			"source": "integration.output",
+			"vhost": "sbtrd",
+			"destination": "ti.publishers.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "adapter.*.legacy.#",
+			"arguments": {}
+		},
+		{
+			"source": "integration.output",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.eventdelivery.betbuilder",
+			"destination_type": "queue",
+			"routing_key": "adapter.content.#",
+			"arguments": {}
+		},
+		{
+			"source": "integration.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed",
+			"destination_type": "exchange",
+			"routing_key": "adapter.fixture.#",
+			"arguments": {}
+		},
+		{
+			"source": "integration.output",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.betting",
+			"destination_type": "queue",
+			"routing_key": "adapter.fixture.#",
+			"arguments": {}
+		},
+		{
+			"source": "integration.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.consistenthash",
+			"destination_type": "exchange",
+			"routing_key": "adapter.market.#",
+			"arguments": {}
+		},
+		{
+			"source": "integration.output",
+			"vhost": "sbtrd",
+			"destination": "ti.statisticsengine.consistenthash",
+			"destination_type": "exchange",
+			"routing_key": "adapter.statistics.#",
+			"arguments": {}
+		},
+		{
+			"source": "integration.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed-chash",
+			"destination_type": "exchange",
+			"routing_key": "fixturelinkcreated.#",
+			"arguments": {}
+		},
+		{
+			"source": "integration.output",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.eventdelivery.betbuilder",
+			"destination_type": "queue",
+			"routing_key": "fixturelinkcreated.#",
+			"arguments": {}
+		},
+		{
+			"source": "integration.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed-chash",
+			"destination_type": "exchange",
+			"routing_key": "fixturelinkdeleted.#",
+			"arguments": {}
+		},
+		{
+			"source": "integration.output",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.eventdelivery.betbuilder",
+			"destination_type": "queue",
+			"routing_key": "fixturelinkdeleted.#",
+			"arguments": {}
+		},
+		{
+			"source": "integration.output",
+			"vhost": "sbtrd",
+			"destination": "ti.sif.fixtureimport.consistenthash",
+			"destination_type": "exchange",
+			"routing_key": "odin.fixture.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.adapter.betbuilder.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.consistenthash",
+			"destination_type": "exchange",
+			"routing_key": "adapter.market.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.adapters",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR.consistentHash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "adapter.fixture.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.adapters",
+			"vhost": "sbtrd",
+			"destination": "ti.fixturemapping",
+			"destination_type": "exchange",
+			"routing_key": "adapter.fixture.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.adapters",
+			"vhost": "sbtrd",
+			"destination": "ti.snapper",
+			"destination_type": "exchange",
+			"routing_key": "adapter.fixture.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.adapters",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.betting",
+			"destination_type": "queue",
+			"routing_key": "adapter.fixture.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.adapters",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.consistenthash",
+			"destination_type": "exchange",
+			"routing_key": "adapter.market.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.adapters.statistics",
+			"vhost": "sbtrd",
+			"destination": "ti.statisticsengine.consistenthash",
+			"destination_type": "exchange",
+			"routing_key": "adapter.statistics.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.betbuilder.mapping.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.eventdelivery.betbuilder",
+			"destination_type": "queue",
+			"routing_key": "adapter.fixture.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.betbuildercontentsubscriber.out",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.eventdelivery.betbuilder",
+			"destination_type": "queue",
+			"routing_key": "publisher.betbuildermarket.*.*.pricedmarketcreated",
+			"arguments": {}
+		},
+		{
+			"source": "ti.bunnycentral",
+			"vhost": "sbtrd",
+			"destination": "ti.phaseswitch.receiver.consistenthash",
+			"destination_type": "exchange",
+			"routing_key": "adapter.fixture.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.bunnycentral",
+			"vhost": "sbtrd",
+			"destination": "ti.marketsuspension.receiver.inbound",
+			"destination_type": "queue",
+			"routing_key": "carburetor.fixture.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.bunnycentral",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed",
+			"destination_type": "exchange",
+			"routing_key": "engine.settings",
+			"arguments": {}
+		},
+		{
+			"source": "ti.bunnycentral",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed",
+			"destination_type": "exchange",
+			"routing_key": "engine.settings.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.bunnycentral",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed",
+			"destination_type": "exchange",
+			"routing_key": "persistor.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.bunnycentral",
+			"vhost": "sbtrd",
+			"destination": "trading.consistenthash.output",
+			"destination_type": "exchange",
+			"routing_key": "receiver.spso.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.cache.trading.marketviewer.output",
+			"vhost": "sbtrd",
+			"destination": "ti.cache.autodelete.trading.marketviewer.inbound-30577c64-66e8-40ee-a6f4-3f80e2bf9b20",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.cache.trading.marketviewer.output",
+			"vhost": "sbtrd",
+			"destination": "ti.cache.autodelete.trading.marketviewer.inbound-41d185b9-211f-4083-9280-de604ebc7a57",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.cache.trading.marketviewer.output",
+			"vhost": "sbtrd",
+			"destination": "ti.cache.autodelete.trading.marketviewer.inbound-4c52cf9a-210a-4e07-a822-c88c6da70aea",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.cache.trading.marketviewer.output",
+			"vhost": "sbtrd",
+			"destination": "ti.cache.autodelete.trading.marketviewer.inbound-5db90bd8-d0d9-4c97-b965-f1259de514c4",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.cache.trading.marketviewer.output",
+			"vhost": "sbtrd",
+			"destination": "ti.cache.autodelete.trading.marketviewer.inbound-71cfb287-cae7-4aa1-8fbc-5a676ea44431",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.cache.trading.marketviewer.output",
+			"vhost": "sbtrd",
+			"destination": "ti.cache.autodelete.trading.marketviewer.inbound-932cbf5f-8ae1-4b4d-baff-eb16fdfeeb8e",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.cache.trading.marketviewer.output",
+			"vhost": "sbtrd",
+			"destination": "ti.cache.autodelete.trading.marketviewer.inbound-97fa442b-ae65-425f-ae0e-1374f10b7c9a",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.cache.trading.marketviewer.output",
+			"vhost": "sbtrd",
+			"destination": "ti.cache.autodelete.trading.marketviewer.inbound-be0d7782-93fc-47b6-a17e-3015f6943d4b",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.category.all",
+			"vhost": "sbtrd",
+			"destination": "ti.category.clearcache.autodelete.in-8iDLFTg4Q0aMuNn8xgCOhA",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.category.all",
+			"vhost": "sbtrd",
+			"destination": "ti.category.clearcache.autodelete.in-oYTqSj_mSP6wiauVK1AC0A",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.category.output",
+			"vhost": "sbtrd",
+			"destination": "ti.category.all",
+			"destination_type": "exchange",
+			"routing_key": "category.invalidatecache.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.category.output",
+			"vhost": "sbtrd",
+			"destination": "ti.category.inbound",
+			"destination_type": "exchange",
+			"routing_key": "category.invalidatecache.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.category.output",
+			"vhost": "sbtrd",
+			"destination": "ti.category.input",
+			"destination_type": "exchange",
+			"routing_key": "category.invalidatecache.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.category.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed-chash",
+			"destination_type": "exchange",
+			"routing_key": "subcategorycreated",
+			"arguments": {}
+		},
+		{
+			"source": "ti.category.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed-chash",
+			"destination_type": "exchange",
+			"routing_key": "subcategoryupdated",
+			"arguments": {}
+		},
+		{
+			"source": "ti.category.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed-chash",
+			"destination_type": "exchange",
+			"routing_key": "tags.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.category.output",
+			"vhost": "sbtrd",
+			"destination": "ti.edbr01.test",
+			"destination_type": "queue",
+			"routing_key": "tags.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.agnostic",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR.consistentHash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "carburetor.fixture.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.agnostic",
+			"vhost": "sbtrd",
+			"destination": "ti.snapper",
+			"destination_type": "exchange",
+			"routing_key": "carburetor.fixture.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash1",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash10",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash11",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash12",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash13",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash14",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash15",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash16",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash17",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash18",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash19",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash2",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash20",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash21",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash22",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash23",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash24",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash25",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash26",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash27",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash28",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash29",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash3",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash30",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash31",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash32",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash33",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash34",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash35",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash36",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash37",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash38",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash39",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash4",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash40",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash5",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash6",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash7",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash8",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.all.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash9",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash1",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash10",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash11",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash12",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash13",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash14",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash15",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash16",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash17",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash18",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash19",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash2",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash20",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash21",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash22",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash23",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash24",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash25",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash26",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash27",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash28",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash29",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash3",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash30",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash31",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash32",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash33",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash34",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash35",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash36",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash37",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash38",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash39",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash4",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash40",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash5",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash6",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash7",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash8",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.legacyR.consistentHash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR-hash9",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.market.output",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.api.v1.output",
+			"destination_type": "exchange",
+			"routing_key": "adapter.settings",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.market.output",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.api.output",
+			"destination_type": "exchange",
+			"routing_key": "trading.settings.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.settings.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.settings-hash1",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.settings.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.settings-hash10",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.settings.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.settings-hash11",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.settings.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.settings-hash12",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.settings.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.settings-hash2",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.settings.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.settings-hash3",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.settings.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.settings-hash4",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.settings.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.settings-hash5",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.settings.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.settings-hash6",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.settings.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.settings-hash7",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.settings.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.settings-hash8",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.engine.settings.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.settings-hash9",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.external",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.betting",
+			"destination_type": "queue",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.external",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.tradingtool",
+			"destination_type": "queue",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.external.bethistory-hash",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.bethistory-hash1",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.external.ed",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed-chash",
+			"destination_type": "exchange",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.external.ed",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.eventdelivery.stream",
+			"destination_type": "queue",
+			"routing_key": "#.fixturecreated.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.external.ed",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.eventdelivery.stream",
+			"destination_type": "queue",
+			"routing_key": "#.fixtureupdated.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.external.ed-chash",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.eventdelivery-hash1",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.external.ed-chash",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.eventdelivery-hash2",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.external.ed-chash",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.eventdelivery-hash3",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.external.ed-chash",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.eventdelivery-hash4",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.external.ed-chash",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.eventdelivery-hash5",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.external.risk-hash",
+			"vhost": "sbtrd",
+			"destination": "ti.external.risk-hash1",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.external.risk-hash",
+			"vhost": "sbtrd",
+			"destination": "ti.external.risk-hash2",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.fixturemapping.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed",
+			"destination_type": "exchange",
+			"routing_key": "fixturelinkcreated.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.fixturemapping.output",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.eventdelivery.betbuilder",
+			"destination_type": "queue",
+			"routing_key": "fixturelinkcreated.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.fixturemapping.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed",
+			"destination_type": "exchange",
+			"routing_key": "fixturelinkdeleted.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.fixturemapping.output",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.eventdelivery.betbuilder",
+			"destination_type": "queue",
+			"routing_key": "fixturelinkdeleted.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.gameaction.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.bethistory-hash",
+			"destination_type": "exchange",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.gameaction.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed",
+			"destination_type": "exchange",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.mapping.main.in",
+			"vhost": "sbtrd",
+			"destination": "ti.mapping.main.autodelete.inbound-F9MjRffQRFqc6su_5JrrTg",
+			"destination_type": "queue",
+			"routing_key": "publisher.mapping.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.mapping.main.in",
+			"vhost": "sbtrd",
+			"destination": "ti.mapping.main.autodelete.inbound-PKWmNqveRjuPRGo6VcmQqA",
+			"destination_type": "queue",
+			"routing_key": "publisher.mapping.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash1",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash10",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash11",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash12",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash13",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash14",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash15",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash16",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash17",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash18",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash19",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash2",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash20",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash21",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash22",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash23",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash24",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash25",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash26",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash27",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash28",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash29",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash3",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash30",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash31",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash32",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash33",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash34",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash35",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash36",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash37",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash38",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash39",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash4",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash40",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash41",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash42",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash43",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash44",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash45",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash46",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash47",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash48",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash49",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash5",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash50",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash51",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash52",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash53",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash54",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash55",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash56",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash57",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash58",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash59",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash6",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash60",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash61",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash62",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash63",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash64",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash7",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash8",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.all",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash9",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash1",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash10",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash11",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash12",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash13",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash14",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash15",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash16",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash17",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash18",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash19",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash2",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash20",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash21",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash22",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash23",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash24",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash25",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash26",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash27",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash28",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash29",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash3",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash30",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash31",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash32",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash33",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash34",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash35",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash36",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash37",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash38",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash39",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash4",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash40",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash41",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash42",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash43",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash44",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash45",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash46",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash47",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash48",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash49",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash5",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash50",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash51",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash52",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash53",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash54",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash55",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash56",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash57",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash58",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash59",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash6",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash60",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash61",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash62",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash63",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash64",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash7",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash8",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.inbound-hash9",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.dlx",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.dlq",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.output.secondary",
+			"destination_type": "queue",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.output",
+			"vhost": "sbtrd",
+			"destination": "ti.publishers.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "engine.market.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.secondary",
+			"vhost": "sbtrd",
+			"destination": "ti.external",
+			"destination_type": "exchange",
+			"routing_key": "engine.market.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.secondary",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.marketviewer.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "engine.market.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketengine.secondary",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.settings.inbound",
+			"destination_type": "exchange",
+			"routing_key": "engine.settings.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketsettings.markettemplategrouping.output",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.api.exclusive.inbound",
+			"destination_type": "exchange",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketsettings.markettemplategrouping.output",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.api.inbound",
+			"destination_type": "exchange",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketsettings.markettemplategrouping.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketsettings.sqlpersistor.input",
+			"destination_type": "queue",
+			"routing_key": "cmd.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketsettings.sqlpersistor.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed",
+			"destination_type": "exchange",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketsuspension.job.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.consistenthash",
+			"destination_type": "exchange",
+			"routing_key": "adapter.market.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketsuspension.job.output",
+			"vhost": "sbtrd",
+			"destination": "trading.consistenthash.output",
+			"destination_type": "exchange",
+			"routing_key": "triggersnapshot.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketupdate.job.output",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.settings.inbound",
+			"destination_type": "exchange",
+			"routing_key": "engine.settings.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.marketupdatedispatcher.consistenthash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.marketupdatedispatcher.inbound-hash1",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.odin.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.consistenthash",
+			"destination_type": "exchange",
+			"routing_key": "adapter.market.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.odin.output",
+			"vhost": "sbtrd",
+			"destination": "ti.sif.fixtureimport.consistenthash",
+			"destination_type": "exchange",
+			"routing_key": "odin.fixture.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.phaseswitch.job.output",
+			"vhost": "sbtrd",
+			"destination": "trading.consistenthash.output",
+			"destination_type": "exchange",
+			"routing_key": "phaseswitch.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.phaseswitch.receiver.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.phaseswitch.receiver.inbound-hash1",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.phaseswitch.receiver.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.phaseswitch.receiver.inbound-hash2",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.phaseswitch.receiver.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.phaseswitch.receiver.inbound-hash3",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.phaseswitch.receiver.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.phaseswitch.receiver.inbound-hash4",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.profile.manager.output",
+			"vhost": "sbtrd",
+			"destination": "ti.profile.resolver.inbound.all",
+			"destination_type": "exchange",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.profile.manager.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.all",
+			"destination_type": "exchange",
+			"routing_key": "oddsladder.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.profile.manager.output",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.market.api.all",
+			"destination_type": "exchange",
+			"routing_key": "oddsladder.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.profile.resolver.inbound.all",
+			"vhost": "sbtrd",
+			"destination": "test.ti.profilemanagementautotest",
+			"destination_type": "queue",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.all",
+			"vhost": "sbtrd",
+			"destination": "ti.publishers-hash1",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.all",
+			"vhost": "sbtrd",
+			"destination": "ti.publishers-hash2",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.all",
+			"vhost": "sbtrd",
+			"destination": "ti.publishers-hash3",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.all",
+			"vhost": "sbtrd",
+			"destination": "ti.publishers-hash4",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.all",
+			"vhost": "sbtrd",
+			"destination": "ti.publishers-hash5",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.consistenthash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.publishers-hash1",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.consistenthash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.publishers-hash2",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.consistenthash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.publishers-hash3",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.consistenthash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.publishers-hash4",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.consistenthash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.publishers-hash5",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.external.risk-hash",
+			"destination_type": "exchange",
+			"routing_key": "#.marketcreated",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.external.risk-hash",
+			"destination_type": "exchange",
+			"routing_key": "#.pricedmarketcreated",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.external.risk-hash",
+			"destination_type": "exchange",
+			"routing_key": "#.selectionlistupdated",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.external.risk-hash",
+			"destination_type": "exchange",
+			"routing_key": "#.stateupdated",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.subscribers.SB-MktId",
+			"destination_type": "exchange",
+			"routing_key": "publisher.betbuildermarket.bebu.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.subscribers.bbc-EvtId",
+			"destination_type": "exchange",
+			"routing_key": "publisher.betbuildermarket.bebu.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.bettingsubscriber.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "publisher.betbuildermarket.bebu.*.*.selectionstateupdated",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.subscribers.SB-MktId",
+			"destination_type": "exchange",
+			"routing_key": "publisher.betbuildermarket.provider.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.subscribers.bbc-EvtId",
+			"destination_type": "exchange",
+			"routing_key": "publisher.betbuildermarket.provider.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.bettingsubscriber.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "publisher.betbuildermarket.provider.*.*.selectionstateupdated",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.subscribers.SB-MktId",
+			"destination_type": "exchange",
+			"routing_key": "publisher.betbuildermarket.thor.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.bettingsubscriber.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "publisher.betbuildermarket.thor.*.*.selectionstateupdated",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.mapping.main.in",
+			"destination_type": "exchange",
+			"routing_key": "publisher.mapping.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed",
+			"destination_type": "exchange",
+			"routing_key": "publisher.market.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.subscribers.SB-MktId",
+			"destination_type": "exchange",
+			"routing_key": "publisher.market.bana.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.bettingsubscriber.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "publisher.market.bana.*.*.selectionstateupdated",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.subscribers.SB-MktId",
+			"destination_type": "exchange",
+			"routing_key": "publisher.market.bege.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.bettingsubscriber.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "publisher.market.bege.*.*.selectionstateupdated",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.subscribers.SB-MktId",
+			"destination_type": "exchange",
+			"routing_key": "publisher.market.bera.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.bettingsubscriber.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "publisher.market.bera.*.*.selectionstateupdated",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.subscribers.SB-MktId",
+			"destination_type": "exchange",
+			"routing_key": "publisher.market.dobe.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.bettingsubscriber.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "publisher.market.dobe.*.*.selectionstateupdated",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.subscribers.SB-MktId",
+			"destination_type": "exchange",
+			"routing_key": "publisher.market.masu.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.bettingsubscriber.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "publisher.market.masu.*.*.selectionstateupdated",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.subscribers.SB-MktId",
+			"destination_type": "exchange",
+			"routing_key": "publisher.market.provider.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.bettingsubscriber.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "publisher.market.provider.*.*.#.selectionstateupdated",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.bettingsubscriber.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "publisher.market.provider.*.*.*.selectionstateupdated",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.bettingsubscriber.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "publisher.market.provider.*.*.selectionstateupdated",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.subscribers.SB-MktId",
+			"destination_type": "exchange",
+			"routing_key": "publisher.market.spso.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.bettingsubscriber.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "publisher.market.spso.*.*.selectionstateupdated",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.subscribers.SB-MktId",
+			"destination_type": "exchange",
+			"routing_key": "publisher.market.thor.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.publishers.out",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.bettingsubscriber.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "publisher.market.thor.*.*.selectionstateupdated",
+			"arguments": {}
+		},
+		{
+			"source": "ti.sif.fixtureimport.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.sif.fixtureimport.inbound-hash1",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.sif.fixtureimport.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.sif.fixtureimport.inbound-hash2",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.sif.fixtureimport.dlx",
+			"vhost": "sbtrd",
+			"destination": "ti.sif.fixtureimport.dlq",
+			"destination_type": "queue",
+			"routing_key": "",
+			"arguments": {}
+		},
+		{
+			"source": "ti.sif.fixtureimport.output",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.eventdelivery.betbuilder",
+			"destination_type": "queue",
+			"routing_key": "adapter.fixture.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.statistics.sbdbsubcriber.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.statistics.sbdbsubcriber.inbound-hash1",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.statistics.sbdbsubcriber.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.statistics.sbdbsubcriber.inbound-hash2",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.statisticsengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.statisticsengine.inbound-hash1",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.statisticsengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.statisticsengine.inbound-hash2",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.statisticsengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.statisticsengine.inbound-hash3",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.statisticsengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.statisticsengine.inbound-hash4",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.statisticsengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.statisticsengine.inbound-hash5",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.statisticsengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.statisticsengine.inbound-hash6",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.statisticsengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.statisticsengine.inbound-hash7",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.statisticsengine.consistenthash",
+			"vhost": "sbtrd",
+			"destination": "ti.statisticsengine.inbound-hash8",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.statisticsengine.output",
+			"vhost": "sbtrd",
+			"destination": "ti.gameaction.output",
+			"destination_type": "exchange",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.statisticsengine.output",
+			"vhost": "sbtrd",
+			"destination": "ti.statistics.sbdbsubcriber.consistenthash",
+			"destination_type": "exchange",
+			"routing_key": "scoreboardupdate.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash1",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash10",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash11",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash12",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash13",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash14",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash15",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash16",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash17",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash18",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash19",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash2",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash20",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash21",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash22",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash23",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash24",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash3",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash4",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash5",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash6",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash7",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash8",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.SB-MktId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.SBDB-hash9",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.bbc-EvtId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.betbuildercontent-hash1",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.bbc-EvtId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.betbuildercontent-hash2",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.bbc-EvtId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.betbuildercontent-hash3",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.bbc-EvtId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.betbuildercontent-hash4",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.bbc-EvtId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.betbuildercontent-hash5",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.bbc-EvtId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.betbuildercontent-hash6",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.bbc-EvtId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.betbuildercontent-hash7",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.subscribers.bbc-EvtId",
+			"vhost": "sbtrd",
+			"destination": "ti.subscriber.betbuildercontent-hash8",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.testTrdCluster",
+			"vhost": "sbtrd",
+			"destination": "test.trd.mgk",
+			"destination_type": "queue",
+			"routing_key": "#",
+			"arguments": {
+				"x-message-ttl": "1000"
+			}
+		},
+		{
+			"source": "ti.trading.api.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.api.autodelete.inbound-lXEPVcBbT5uXMTMbVGyIlQ",
+			"destination_type": "queue",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.bettingsubscriber.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.api.output",
+			"vhost": "sbtrd",
+			"destination": "jalo-test",
+			"destination_type": "queue",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed-chash",
+			"destination_type": "exchange",
+			"routing_key": "markettemplatecreated.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed-chash",
+			"destination_type": "exchange",
+			"routing_key": "markettemplateupdated.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.api.output",
+			"vhost": "sbtrd",
+			"destination": "trading.consistenthash.output",
+			"destination_type": "exchange",
+			"routing_key": "receiver.loki.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.api.output",
+			"vhost": "sbtrd",
+			"destination": "trading.consistenthash.output",
+			"destination_type": "exchange",
+			"routing_key": "receiver.thor.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.all",
+			"destination_type": "exchange",
+			"routing_key": "selectiontemplatecreated.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed-chash",
+			"destination_type": "exchange",
+			"routing_key": "selectiontemplatecreated.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.all",
+			"destination_type": "exchange",
+			"routing_key": "selectiontemplateupdated.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed-chash",
+			"destination_type": "exchange",
+			"routing_key": "selectiontemplateupdated.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.settings.inbound",
+			"destination_type": "exchange",
+			"routing_key": "trading.settings.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.api.v1.output",
+			"vhost": "sbtrd",
+			"destination": "ti.bunnycentral",
+			"destination_type": "exchange",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.api.v1.output",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR.consistentHash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "adapter.fixture.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.api.v1.output",
+			"vhost": "sbtrd",
+			"destination": "trading.consistenthash.output",
+			"destination_type": "exchange",
+			"routing_key": "adapter.fixture.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.api.v1.output",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.legacyR.all.inbound",
+			"destination_type": "exchange",
+			"routing_key": "adapter.fixturemapping.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.api.v1.output",
+			"vhost": "sbtrd",
+			"destination": "trading.consistenthash.output",
+			"destination_type": "exchange",
+			"routing_key": "adapter.fixturemapping.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.api.v1.output",
+			"vhost": "sbtrd",
+			"destination": "ti.engine.settings.inbound",
+			"destination_type": "exchange",
+			"routing_key": "adapter.settings",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.api.v1.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.tt-watcher",
+			"destination_type": "queue",
+			"routing_key": "cmd.watcher.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.bettingsubscriber.consistenthash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.bettingsubscriber.inbound-hash1",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.bettingsubscriber.outbound",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.bettingsubscriber",
+			"destination_type": "queue",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.fixture.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.bethistory-hash",
+			"destination_type": "exchange",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.fixture.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed",
+			"destination_type": "exchange",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.fixture.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.marketviewer.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.fixture.api.output",
+			"vhost": "sbtrd",
+			"destination": "trading.consistenthash.output",
+			"destination_type": "exchange",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.fixture.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketsuspension.receiver.inbound",
+			"destination_type": "queue",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.fixture.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketupdatedispatcher.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "*.fixturecreated.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.fixture.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.all",
+			"destination_type": "exchange",
+			"routing_key": "*.fixtureupdated.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.fixture.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketupdatedispatcher.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "*.fixtureupdated.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.fixture.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.tradingtool",
+			"destination_type": "queue",
+			"routing_key": "*.fixtureupdated.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.fixture.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.all",
+			"destination_type": "exchange",
+			"routing_key": "*.nameandstartdateupdated.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.fixture.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketupdatedispatcher.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "*.nameandstartdateupdated.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.fixture.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.tradingtool",
+			"destination_type": "queue",
+			"routing_key": "*.nameandstartdateupdated.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.fixture.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.all",
+			"destination_type": "exchange",
+			"routing_key": "*.phaseandstartdateupdated.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.fixture.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketupdatedispatcher.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "*.phaseandstartdateupdated.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.fixture.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.tradingtool",
+			"destination_type": "queue",
+			"routing_key": "*.phaseandstartdateupdated.*\t",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.fixture.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketupdatedispatcher.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "*.phaseupdated.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.fixture.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.all",
+			"destination_type": "exchange",
+			"routing_key": "*.startdateupdated.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.fixture.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketupdatedispatcher.consistenthash.inbound",
+			"destination_type": "exchange",
+			"routing_key": "*.startdateupdated.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.fixture.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.tradingtool",
+			"destination_type": "queue",
+			"routing_key": "*.startdateupdated.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.market.api.output",
+			"vhost": "sbtrd",
+			"destination": "test.ti.dynamicmarkettag",
+			"destination_type": "queue",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.market.api.output",
+			"vhost": "sbtrd",
+			"destination": "trading.consistenthash.output",
+			"destination_type": "exchange",
+			"routing_key": "receiver.thor.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.marketviewer.consistenthash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.marketviewer.inbound-hash1",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.marketviewer.consistenthash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.marketviewer.inbound-hash2",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.marketviewer.consistenthash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.marketviewer.inbound-hash3",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.marketviewer.consistenthash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.marketviewer.inbound-hash4",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.marketviewer.consistenthash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.marketviewer.inbound-hash5",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.marketviewer.consistenthash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.marketviewer.inbound-hash6",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.marketviewer.consistenthash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.marketviewer.inbound-hash7",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.marketviewer.consistenthash.inbound",
+			"vhost": "sbtrd",
+			"destination": "ti.trading.marketviewer.inbound-hash8",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.risklimits.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.risk-hash",
+			"destination_type": "exchange",
+			"routing_key": "risklimitsapi.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.trading.risklimits.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.tradingtool",
+			"destination_type": "queue",
+			"routing_key": "risklimitsapi.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.tradingtemplate.all",
+			"vhost": "sbtrd",
+			"destination": "ti.tradingtemplate.autodelete.inbound-s7bV1KpmTSmPXaxjUlBJ8A",
+			"destination_type": "queue",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.tradingtemplate.all",
+			"vhost": "sbtrd",
+			"destination": "ti.tradingtemplate.autodelete.inbound-yWb1eojdRPSaa5NxvLzuAQ",
+			"destination_type": "queue",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.tradingtemplate.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.tradingtemplate.all",
+			"destination_type": "exchange",
+			"routing_key": "#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.tradingtemplate.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed-chash",
+			"destination_type": "exchange",
+			"routing_key": "markettemplatecreated.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.tradingtemplate.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed-chash",
+			"destination_type": "exchange",
+			"routing_key": "markettemplateupdated.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.tradingtemplate.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.all",
+			"destination_type": "exchange",
+			"routing_key": "selectiontemplatecreated.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.tradingtemplate.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed-chash",
+			"destination_type": "exchange",
+			"routing_key": "selectiontemplatecreated.*",
+			"arguments": {}
+		},
+		{
+			"source": "ti.tradingtemplate.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.marketengine.all",
+			"destination_type": "exchange",
+			"routing_key": "selectiontemplateupdated.#",
+			"arguments": {}
+		},
+		{
+			"source": "ti.tradingtemplate.api.output",
+			"vhost": "sbtrd",
+			"destination": "ti.external.ed-chash",
+			"destination_type": "exchange",
+			"routing_key": "selectiontemplateupdated.*",
+			"arguments": {}
+		},
+		{
+			"source": "trading.consistenthash.output",
+			"vhost": "sbtrd",
+			"destination": "ti.extension.integration-hash1",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "sb.obg.source.consistenthash.exchange",
+			"vhost": "sbobg",
+			"destination": "sb.obg.source.fanout.exchange",
+			"destination_type": "exchange",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "sb.obg.source.fanout.exchange",
+			"vhost": "sbobg",
+			"destination": "sb.obg.source.consumer.001",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "sb.obg.source.fanout.exchange",
+			"vhost": "sbobg",
+			"destination": "sb.obg.source.consumer.002",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "sb.obg.source.fanout.exchange",
+			"vhost": "sbobg",
+			"destination": "sb.obg.source.consumer.003",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "sb.obg.source.fanout.exchange",
+			"vhost": "sbobg",
+			"destination": "sb.obg.source.consumer.004",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "sb.obg.source.fanout.exchange",
+			"vhost": "sbobg",
+			"destination": "sb.obg.source.consumer.005",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "sb.obg.source.fanout.exchange",
+			"vhost": "sbobg",
+			"destination": "sb.obg.source.consumer.006",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "sb.obg.source.fanout.exchange",
+			"vhost": "sbobg",
+			"destination": "sb.obg.source.consumer.007",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "sb.obg.source.fanout.exchange",
+			"vhost": "sbobg",
+			"destination": "sb.obg.source.consumer.008",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "sb.obg.source.fanout.exchange",
+			"vhost": "sbobg",
+			"destination": "sb.obg.source.consumer.009",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "sb.obg.source.fanout.exchange",
+			"vhost": "sbobg",
+			"destination": "sb.obg.source.consumer.010",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "sb.obg.source.fanout.exchange",
+			"vhost": "sbobg",
+			"destination": "sb.obg.source.consumer.011",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "sb.obg.source.fanout.exchange",
+			"vhost": "sbobg",
+			"destination": "sb.obg.source.consumer.012",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "sb.obg.source.fanout.exchange",
+			"vhost": "sbobg",
+			"destination": "sb.obg.source.consumer.013",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		},
+		{
+			"source": "sb.obg.source.fanout.exchange",
+			"vhost": "sbobg",
+			"destination": "sb.obg.source.consumer.014",
+			"destination_type": "queue",
+			"routing_key": "20",
+			"arguments": {}
+		}
+	]
+}

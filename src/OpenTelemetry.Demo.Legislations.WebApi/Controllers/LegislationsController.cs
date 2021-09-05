@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using EasyNetQ;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry.Demo.Public.Contracts.DTOs;
@@ -13,10 +14,12 @@ namespace OpenTelemetry.Demo.Legislations.WebApi.Controllers
     public class LegislationsController : ControllerBase
     {
         private readonly IDatabase _redis;
+        private readonly IAdvancedBus _bus;
         private readonly ILogger<LegislationsController> _logger;
 
-        public LegislationsController([NotNull] IDatabase redis, ILogger<LegislationsController> logger)
+        public LegislationsController([NotNull] IDatabase redis, [NotNull] IAdvancedBus bus, ILogger<LegislationsController> logger)
         {
+            _bus = bus;
             _redis = redis;
             _logger = logger;
         }
@@ -43,7 +46,7 @@ namespace OpenTelemetry.Demo.Legislations.WebApi.Controllers
                 await _redis.StringSetAsync(key, Guid.NewGuid().ToString());
                 var userCacheEntry = await _redis.StringGetAsync(key);
             }
-            
+
             return new LegislationsResponseDto
             {
                 LegislationId = 1,
