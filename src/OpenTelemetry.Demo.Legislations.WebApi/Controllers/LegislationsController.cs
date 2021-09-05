@@ -24,14 +24,30 @@ namespace OpenTelemetry.Demo.Legislations.WebApi.Controllers
         [HttpGet("/user/{userId}")]
         public async Task<LegislationsResponseDto> GetAsync(int userId)
         {
-            var key = $"userid_{userId}";
-            await _redis.StringSetAsync(key, Guid.NewGuid().ToString());
-            var userCacheEntry = await _redis.StringGetAsync(key);
+            Random r = new Random();
+            var expiryKeys = r.Next(1, 100);
+
+            for (int i = 0; i < expiryKeys; i++)
+            {
+                var key = $"userid_{r.Next()}";
+                var expiry = r.Next(1, 10);
+                await _redis.StringSetAsync(key, Guid.NewGuid().ToString(), TimeSpan.FromMinutes(expiry));
+                var userCacheEntry = await _redis.StringGetAsync(key);
+            }
+            
+            var nonExpiryKeys = r.Next(1, 100);
+
+            for (int i = 0; i < nonExpiryKeys; i++)
+            {
+                var key = $"userid_{r.Next()}";
+                await _redis.StringSetAsync(key, Guid.NewGuid().ToString());
+                var userCacheEntry = await _redis.StringGetAsync(key);
+            }
             
             return new LegislationsResponseDto
             {
                 LegislationId = 1,
-                LegislationName = userCacheEntry.ToString()
+                LegislationName = "MGA"
             };
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry.Context.Propagation;
@@ -47,23 +48,26 @@ namespace OpenTelemetry.Demo.Users.WebApi.Controllers
                 userEntity = response.FirstOrDefault();
             }
 
+            var loh = new LargeObject[2048];
+
+            for (int i = 0; i < loh.Length; i++)
+            {
+                loh[i] = new LargeObject();
+            }
+
+            var LohDic = loh.ToDictionary(x => x.Id, o => o);
             var legislationsResponse = await _legislationsClient.GetLegislationAsync(userEntity.UserId);
-            
+            _logger.LogInformation($"LargeObject ID: {LohDic.First().Key}");
+
             using (var activity = Activity.StartActivity("GetUser", ActivityKind.Server))
             {
                 AddActivityToHeader(activity);
-                Thread.Sleep(5000);
-                
-                if (userEntity != null)
-                {
-                    return new UserResponseDto
-                    {
-                        UserId = userEntity.UserId,
-                        Username = userEntity.Username
-                    };   
-                }
 
-                return null;
+                return new UserResponseDto
+                {
+                    UserId = userEntity.UserId,
+                    Username = userEntity.Username
+                };  
             }
         }
 
