@@ -5,6 +5,9 @@ namespace OpenTelemetry.Demo.Public.Contracts.Options
     public class RabbitOptions
     {
         public const string RabbitOptionsKey = "RabbitMessageBus";
-        public List<string> Hosts { get; set; } = new List<string> {"localhost:5673"};
+        public string Hosts { get; set; } = "localhost:5672";
+        public string VirtualHost { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
     }
 }

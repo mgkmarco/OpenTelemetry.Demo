@@ -21,4 +21,11 @@
       <ProjectReference Include="..\OpenTelemetry.Demo.Public.Contracts\OpenTelemetry.Demo.Public.Contracts.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Messaging\SampleMarketSet.txt" />
+      <Content Include="Messaging\SampleMarketSet.txt">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>

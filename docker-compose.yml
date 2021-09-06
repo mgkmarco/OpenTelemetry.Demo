@@ -39,18 +39,19 @@ services:
       
   rmq0: &rabbitmq
     image: rabbit-management-decompression
-    networks:
-        - open-telemetry
+    hostname: rmq0
+    container_name: rmq0
     build:
       context: ./rabbitmq
       args:
         - definitions=trd_definitions.json
       dockerfile: Dockerfile
+    networks:
+        - open-telemetry
     ports:
       - "15672:15672"
       - "5672:5672"
       - "15692:15692"
-    hostname: rmq0
     environment:
       rabbitmq_erlang_cookie: open-telemetry
     volumes:
@@ -60,6 +61,7 @@ services:
   rmq1:
     << : *rabbitmq
     hostname: rmq1
+    container_name: rmq1
     ports:
       - "15674:15672"
       - "5674:5672"      
@@ -70,6 +72,7 @@ services:
   rmq2:
     << : *rabbitmq
     hostname: rmq2
+    container_name: rmq2
     ports:
       - "15675:15672"
       - "5675:5672"      
@@ -158,3 +161,7 @@ services:
       JaegerExporter__AgentPort: 6831
       Redis__Host: redis
       Redis__Port: 6379
+      RabbitMessageBus__Hosts: rmq0:5672,rmq1:5674,rmq2:5675
+      RabbitMessageBus__VirtualHost: sbtrd
+      RabbitMessageBus__Username: sbdev
+      RabbitMessageBus__Password: sbdev

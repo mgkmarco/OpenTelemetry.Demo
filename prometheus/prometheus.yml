@@ -40,3 +40,9 @@ scrape_configs:
         target_label: instance
       - target_label: __address__
         replacement: redisexporter:9121
+  - job_name: 'rabbitmq-server'
+    static_configs:
+      - targets:
+          - 'rmq0:15692'
+          - 'rmq1:15692'
+          - 'rmq2:15692'        

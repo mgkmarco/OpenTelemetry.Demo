@@ -21,6 +21,7 @@ namespace OpenTelemetry.Demo.Legislations.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddMessageBus(Configuration);
             services.AddOpenTelemetry(Configuration);
             services.AddSwaggerGen(c =>
             {

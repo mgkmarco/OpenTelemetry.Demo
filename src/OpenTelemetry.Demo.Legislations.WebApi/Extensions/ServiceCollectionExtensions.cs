@@ -1,4 +1,5 @@
-﻿using EasyNetQ;
+﻿using System;
+using EasyNetQ;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Demo.Public.Contracts.Options;
@@ -14,20 +15,9 @@ namespace OpenTelemetry.Demo.Legislations.WebApi.Extensions
         {
             var rabbitOptions = new RabbitOptions();
             configuration.GetSection(RabbitOptions.RabbitOptionsKey).Bind(rabbitOptions);
-            var connectionString = "host=";
+            var connectionString = $"host={rabbitOptions.Hosts}";
 
-            for (int i = 0; i < rabbitOptions.Hosts.Count; i++)
-            {
-                if (i == 0)
-                {
-                    connectionString += $"{rabbitOptions.Hosts[i]}";
-                    break;
-                }
-
-                connectionString += $",{rabbitOptions.Hosts[i]}";
-            }
-            
-            services.AddSingleton(RabbitHutch.CreateBus(connectionString).Advanced);
+            services.AddSingleton(RabbitHutch.CreateBus($"{connectionString};virtualHost={rabbitOptions.VirtualHost};username={rabbitOptions.Username};password={rabbitOptions.Password}").Advanced);
         }
         
         public static void AddOpenTelemetry(this IServiceCollection services, IConfiguration configuration)
