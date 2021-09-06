@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading.Tasks;
@@ -6,6 +8,8 @@ using EasyNetQ;
 using EasyNetQ.Topology;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using OpenTelemetry.Context.Propagation;
+using OpenTelemetry.Demo.Legislations.WebApi.Extensions;
 using OpenTelemetry.Demo.Public.Contracts.DTOs;
 using StackExchange.Redis;
 
@@ -15,6 +19,9 @@ namespace OpenTelemetry.Demo.Legislations.WebApi.Controllers
     [Route("[controller]")]
     public class LegislationsController : ControllerBase
     {
+        private static readonly ActivitySource Activity = new(nameof(LegislationsController));
+        private static readonly TextMapPropagator Propagator = Propagators.DefaultTextMapPropagator;
+        
         private readonly IDatabase _redis;
         private readonly IAdvancedBus _bus;
         private readonly ILogger<LegislationsController> _logger;
@@ -54,11 +61,23 @@ namespace OpenTelemetry.Demo.Legislations.WebApi.Controllers
             var exchange = new Exchange("ti.testTrdCluster", ExchangeType.Topic);
             
             var body = Encoding.UTF8.GetBytes(_sampleMarketSet);
-            
+
             for (int i = 0; i < 20; i++)
             {
-                
-                await _bus.PublishAsync(exchange, "#", true, new MessageProperties(), body);
+                using (var activity = Activity.StartActivity(nameof(_bus.PublishAsync), ActivityKind.Producer))
+                {
+                    var tags = new Dictionary<string, object>
+                    {
+                        { "messaging.system", "rabbitmq" },
+                        { "messaging.destination_kind", "exchange" },
+                        { "messaging.rabbitmq.exchange", exchange.Name },
+                        { "messaging.rabbitmq.exchange-type", exchange.Type },
+                    };
+
+                    activity.AddActivityToHeader(Propagator, tags, new MessageProperties());
+
+                    await _bus.PublishAsync(exchange, "#", true, new MessageProperties(), body);
+                }
             }
 
             return new LegislationsResponseDto

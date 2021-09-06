@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{20DCA5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTelemetry.Demo.Legislations.WebApi", "src\OpenTelemetry.Demo.Legislations.WebApi\OpenTelemetry.Demo.Legislations.WebApi.csproj", "{374EDCD1-2EF4-40B1-8730-322A0B1B24C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTelemetry.Demo.Consumer", "src\OpenTelemetry.Demo.Consumer\OpenTelemetry.Demo.Consumer.csproj", "{B04F8177-4303-46C1-8076-6D66222A2B75}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{374EDCD1-2EF4-40B1-8730-322A0B1B24C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{374EDCD1-2EF4-40B1-8730-322A0B1B24C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{374EDCD1-2EF4-40B1-8730-322A0B1B24C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B04F8177-4303-46C1-8076-6D66222A2B75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B04F8177-4303-46C1-8076-6D66222A2B75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B04F8177-4303-46C1-8076-6D66222A2B75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B04F8177-4303-46C1-8076-6D66222A2B75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
