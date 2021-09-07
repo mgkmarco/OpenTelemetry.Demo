@@ -1,0 +1,23 @@
+﻿{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "Metrics": {
+    "Host": "localhost",
+    "Port": "9090"
+  },
+  "JaegerExporter": {
+    "AgentHost": "localhost",
+    "AgentPort": 6831
+  },
+  "RabbitMessageBus": {
+    "Hosts": "localhost:5672,localhost:5674,localhost:5675",
+    "VirtualHost": "sbtrd",
+    "Username": "sbdev",
+    "Password": "sbdev"
+  }
+}

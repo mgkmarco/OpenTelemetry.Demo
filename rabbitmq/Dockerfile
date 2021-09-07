@@ -1,4 +1,4 @@
-ARG PLUGIN_VERSION=1.0.0
+ARG PLUGIN_VERSION=1.0.1
 # Use the latest stable RabbitMQ Management Decompression plugin
 ARG PLUGIN_NAMED_VERSION="rabbitmq_management_decompression-$PLUGIN_VERSION.ez"
 

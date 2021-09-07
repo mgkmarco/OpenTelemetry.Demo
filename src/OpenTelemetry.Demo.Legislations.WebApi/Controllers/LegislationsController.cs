@@ -74,9 +74,10 @@ namespace OpenTelemetry.Demo.Legislations.WebApi.Controllers
                         { "messaging.rabbitmq.exchange-type", exchange.Type },
                     };
 
-                    activity.AddActivityToHeader(Propagator, tags, new MessageProperties());
+                    var messageProperties = new MessageProperties();
+                    activity.AddActivityToHeader(Propagator, tags, messageProperties, _logger);
 
-                    await _bus.PublishAsync(exchange, "#", true, new MessageProperties(), body);
+                    await _bus.PublishAsync(exchange, "#", true, messageProperties, body);
                 }
             }
 

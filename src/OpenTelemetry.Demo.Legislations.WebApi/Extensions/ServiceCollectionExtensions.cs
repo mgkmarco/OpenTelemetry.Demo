@@ -1,5 +1,4 @@
-﻿using System;
-using EasyNetQ;
+﻿using EasyNetQ;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Demo.Public.Contracts.Options;
@@ -16,10 +15,13 @@ namespace OpenTelemetry.Demo.Legislations.WebApi.Extensions
             var rabbitOptions = new RabbitOptions();
             configuration.GetSection(RabbitOptions.RabbitOptionsKey).Bind(rabbitOptions);
             var connectionString = $"host={rabbitOptions.Hosts}";
-
-            services.AddSingleton(RabbitHutch.CreateBus($"{connectionString};virtualHost={rabbitOptions.VirtualHost};username={rabbitOptions.Username};password={rabbitOptions.Password}").Advanced);
+            
+            services.AddSingleton(RabbitHutch
+                .CreateBus(
+                    $"{connectionString};virtualHost={rabbitOptions.VirtualHost};username={rabbitOptions.Username};password={rabbitOptions.Password}")
+                .Advanced);
         }
-        
+
         public static void AddOpenTelemetry(this IServiceCollection services, IConfiguration configuration)
         {
             var jaegerOptions = new JaegerOptions();
@@ -32,7 +34,7 @@ namespace OpenTelemetry.Demo.Legislations.WebApi.Extensions
             {
                 var connectionMux = ConnectionMultiplexer.Connect($"{redisOptions.Host}:{redisOptions.Port}");
                 services.AddSingleton(connectionMux.GetDatabase());
-                    
+
                 builder
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()

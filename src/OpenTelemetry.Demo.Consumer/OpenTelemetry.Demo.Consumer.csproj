@@ -7,15 +7,27 @@
 
     <ItemGroup>
         <PackageReference Include="EasyNetQ" Version="6.3.1" />
+        <PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.2.0-alpha2" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
         <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
+        <PackageReference Include="prometheus-net.AspNetCore" Version="3.4.0" />
     </ItemGroup>
-    
+
     <ItemGroup>
-      <Reference Include="Microsoft.Extensions.Hosting.Abstractions, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-        <HintPath>..\..\..\..\Program Files\dotnet\packs\Microsoft.AspNetCore.App.Ref\5.0.0\ref\net5.0\Microsoft.Extensions.Hosting.Abstractions.dll</HintPath>
-      </Reference>
+      <ProjectReference Include="..\OpenTelemetry.Demo.Public.Contracts\OpenTelemetry.Demo.Public.Contracts.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="appsetting.Development.json" />
+      <Content Include="appsetting.Development.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="appsettings.json" />
+      <Content Include="appsettings.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>
