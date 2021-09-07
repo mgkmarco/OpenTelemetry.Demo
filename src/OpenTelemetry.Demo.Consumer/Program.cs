@@ -48,7 +48,9 @@ namespace OpenTelemetry.Demo.Consumer
                             var metricsOptions = new MetricsOptions();
                             configuration.GetSection(MetricsOptions.MetricsOptionsKey).Bind(metricsOptions);
 
-                            return new MetricServer(hostname: metricsOptions.Host, metricsOptions.Port);
+                            var metricServer = new MetricServer(hostname: metricsOptions.Host, metricsOptions.Port);
+
+                            return metricServer.Start();
                         })
                         .AddSingleton(provider =>
                         {

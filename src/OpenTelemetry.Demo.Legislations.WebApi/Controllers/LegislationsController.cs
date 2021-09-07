@@ -41,6 +41,7 @@ namespace OpenTelemetry.Demo.Legislations.WebApi.Controllers
             Random r = new Random();
             var expiryKeys = r.Next(1, 100);
 
+            //Simulate keys with expiration
             for (int i = 0; i < expiryKeys; i++)
             {
                 var key = $"userid_{r.Next()}";
@@ -51,6 +52,7 @@ namespace OpenTelemetry.Demo.Legislations.WebApi.Controllers
             
             var nonExpiryKeys = r.Next(1, 100);
 
+            //Simulate non-expiry keys 
             for (int i = 0; i < nonExpiryKeys; i++)
             {
                 var key = $"userid_{r.Next()}";
@@ -62,6 +64,7 @@ namespace OpenTelemetry.Demo.Legislations.WebApi.Controllers
             
             var body = Encoding.UTF8.GetBytes(_sampleMarketSet);
 
+            //Simulate a bunch of messages 
             for (int i = 0; i < 20; i++)
             {
                 using (var activity = Activity.StartActivity(nameof(_bus.PublishAsync), ActivityKind.Producer))

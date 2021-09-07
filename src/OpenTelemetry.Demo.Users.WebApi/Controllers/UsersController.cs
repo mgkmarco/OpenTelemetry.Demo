@@ -50,6 +50,7 @@ namespace OpenTelemetry.Demo.Users.WebApi.Controllers
 
             using (var activity = Activity.StartActivity("GetUser", ActivityKind.Internal))
             {
+                //Simulate Large Object on the heap for GEN2 promotions
                 var loh = new LargeObject[2048];
 
                 for (int i = 0; i < loh.Length; i++)
