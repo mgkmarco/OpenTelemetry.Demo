@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry.Context.Propagation;
 using OpenTelemetry.Demo.Consumer.Extensions;
+using OpenTelemetry.Trace;
 using Prometheus;
 
 namespace OpenTelemetry.Demo.Consumer.BackgroundServices
@@ -17,16 +19,18 @@ namespace OpenTelemetry.Demo.Consumer.BackgroundServices
     public class ConsumerService : IHostedService
     {
         private static readonly ActivitySource Activity = new(nameof(ConsumerService));
-        private static readonly TextMapPropagator Propagator = Propagators.DefaultTextMapPropagator;
+        private static readonly TextMapPropagator Propagator = new TraceContextPropagator();
 
         private readonly IMetricServer _metricServer;
         private readonly IAdvancedBus _bus;
         private readonly ILogger<ConsumerService> _logger;
+        private readonly TracerProvider _tracerProvider;
 
-        public ConsumerService([NotNull] IMetricServer metricServer, [NotNull] IAdvancedBus bus,
+        public ConsumerService([NotNull] IMetricServer metricServer, [NotNull] TracerProvider tracerProvider, [NotNull] IAdvancedBus bus,
             [NotNull] ILogger<ConsumerService> logger)
         {
             _metricServer = metricServer;
+            _tracerProvider = tracerProvider;
             _bus = bus;
             _logger = logger;
         }
@@ -34,24 +38,31 @@ namespace OpenTelemetry.Demo.Consumer.BackgroundServices
         public Task StartAsync(CancellationToken cancellationToken)
         {
             var queue = new Queue("test.trd.mgk");
-            _bus.Consume(queue, (body, properties, info) => Task.Factory.StartNew(() =>
+            _bus.Consume(queue, (body, properties, info) =>
             {
-                // using(var activity = Activity.StartActivity(nameof(_bus.Consume), ActivityKind.Consumer))
-                // {
-                    var message = Encoding.UTF8.GetString(body);
-                    
-                //     var tags = new Dictionary<string, object>
-                //     {
-                //         { "messaging.system", "rabbitmq" },
-                //         { "messaging.rabbitmq.queue", queue.Name }
-                //     };
-                //     
-                //     activity.ExtractActivityFromHeader(Propagator, tags, messageProperties, _logger);
-                //     
-                // }
-            }, cancellationToken));
-
-            return Task.CompletedTask;
+                return Task.Factory.StartNew(() =>
+                {
+                    try
+                    {
+                        using (var activity = Activity.StartActivity(nameof(_bus.Consume), ActivityKind.Consumer,
+                            Propagator.ExtractActivityContextFromParentContext(properties, _logger),
+                            new Dictionary<string, object>
+                            {
+                                {"messaging.system", "rabbitmq"},
+                                {"messaging.rabbitmq.queue", queue.Name}
+                            }))
+                        {
+                            var message = Encoding.UTF8.GetString(body);
+                            _logger.LogInformation(
+                                $"TraceParentID: {activity?.TraceId}, Message Consumed: \n{message}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex.Message, ex);
+                    }
+                }, cancellationToken);
+            });
 
             return Task.CompletedTask;
         }
@@ -59,6 +70,7 @@ namespace OpenTelemetry.Demo.Consumer.BackgroundServices
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             await _metricServer.StopAsync();
+            _tracerProvider.Shutdown();
         }
     }
 }
