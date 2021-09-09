@@ -44,7 +44,7 @@ namespace OpenTelemetry.Demo.Consumer.BackgroundServices
                 {
                     try
                     {
-                        using (var activity = Activity.StartActivity(nameof(_bus.Consume), ActivityKind.Consumer,
+                        using (var activity = Activity.StartActivity("nameof(_bus.Consume)", ActivityKind.Consumer,
                             Propagator.ExtractActivityContextFromParentContext(properties, _logger),
                             new Dictionary<string, object>
                             {

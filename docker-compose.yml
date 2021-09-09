@@ -156,11 +156,39 @@ services:
     depends_on:
       - jaeger
       - redis
+      - rmq0
+      - rmq1
+      - rmq2
     environment:
       JaegerExporter__AgentHost: jaeger
       JaegerExporter__AgentPort: 6831
       Redis__Host: redis
       Redis__Port: 6379
+      RabbitMessageBus__Hosts: rmq0:5672,rmq1:5674,rmq2:5675
+      RabbitMessageBus__VirtualHost: sbtrd
+      RabbitMessageBus__Username: sbdev
+      RabbitMessageBus__Password: sbdev
+      
+  consumerservice:
+    container_name: consumerservice
+    hostname: consumerservice
+    image: consumerservice
+    build:
+      context: .
+      dockerfile: src/OpenTelemetry.Demo.Consumer/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "7000:80"
+    networks:
+      - open-telemetry
+    depends_on:
+      - jaeger
+      - rmq0
+      - rmq1
+      - rmq2
+    environment:
+      JaegerExporter__AgentHost: jaeger
+      JaegerExporter__AgentPort: 6831
       RabbitMessageBus__Hosts: rmq0:5672,rmq1:5674,rmq2:5675
       RabbitMessageBus__VirtualHost: sbtrd
       RabbitMessageBus__Username: sbdev

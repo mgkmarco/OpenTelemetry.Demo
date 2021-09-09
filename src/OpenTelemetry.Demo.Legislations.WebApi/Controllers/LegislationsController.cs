@@ -39,7 +39,7 @@ namespace OpenTelemetry.Demo.Legislations.WebApi.Controllers
         public async Task<LegislationsResponseDto> GetAsync(int userId)
         {
             Random r = new Random();
-            var expiryKeys = r.Next(1, 100);
+            var expiryKeys = r.Next(1, 10);
 
             //Simulate keys with expiration
             for (int i = 0; i < expiryKeys; i++)
@@ -50,7 +50,7 @@ namespace OpenTelemetry.Demo.Legislations.WebApi.Controllers
                 var userCacheEntry = await _redis.StringGetAsync(key);
             }
             
-            var nonExpiryKeys = r.Next(1, 100);
+            var nonExpiryKeys = r.Next(1, 10);
 
             //Simulate non-expiry keys 
             for (int i = 0; i < nonExpiryKeys; i++)
@@ -65,7 +65,7 @@ namespace OpenTelemetry.Demo.Legislations.WebApi.Controllers
             var body = Encoding.UTF8.GetBytes(_sampleMarketSet);
 
             //Simulate a bunch of messages 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 10; i++)
             {
                 using (var activity = Activity.StartActivity(nameof(_bus.PublishAsync), ActivityKind.Producer))
                 {

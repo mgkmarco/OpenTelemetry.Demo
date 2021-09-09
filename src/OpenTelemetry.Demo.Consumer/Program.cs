@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using OpenTelemetry.Context.Propagation;
 using OpenTelemetry.Demo.Consumer.BackgroundServices;
 using OpenTelemetry.Demo.Public.Contracts.Options;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Prometheus;
@@ -19,9 +20,6 @@ namespace OpenTelemetry.Demo.Consumer
 {
     public class Program
     {
-        private static IConfiguration _configuration;
-        private static ILogger<Program> _logger;
-        
         public static Task Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
@@ -56,7 +54,7 @@ namespace OpenTelemetry.Demo.Consumer
                             var configuration = provider.GetRequiredService<IConfiguration>();
                             var metricsOptions = new MetricsOptions();
                             configuration.GetSection(MetricsOptions.MetricsOptionsKey).Bind(metricsOptions);
-
+                            
                             var metricServer = new MetricServer(hostname: metricsOptions.Host, metricsOptions.Port);
 
                             return metricServer.Start();

@@ -28,6 +28,9 @@ scrape_configs:
   - job_name: 'legislations-webapi-prometheus'
     static_configs:
       - targets: ['legislationswebapi:80']
+  - job_name: 'consumer-service'
+    static_configs:
+      - targets: ['consumerservice:80']      
   - job_name: 'redis_exporter_targets'
     static_configs:
       - targets:
