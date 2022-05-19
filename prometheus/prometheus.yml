@@ -25,12 +25,19 @@ scrape_configs:
   - job_name: 'users-webapi-prometheus'
     static_configs:
       - targets: ['userswebapi:80']
+  - job_name: 'hive-users-webapi-prometheus'
+    static_configs:
+      - targets: ['hiveuserswebapi:80']
+    metrics_path: /hive/metrics
   - job_name: 'legislations-webapi-prometheus'
     static_configs:
       - targets: ['legislationswebapi:80']
   - job_name: 'consumer-service'
     static_configs:
-      - targets: ['consumerservice:80']      
+      - targets: ['consumerservice:80']
+  - job_name: 'consumer-service2'
+    static_configs:
+      - targets: ['consumerservice2:80']      
   - job_name: 'redis_exporter_targets'
     static_configs:
       - targets:

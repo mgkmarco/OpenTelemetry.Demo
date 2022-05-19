@@ -127,7 +127,30 @@ services:
       dockerfile: src/OpenTelemetry.Demo.Users.WebApi/Dockerfile
     restart: unless-stopped
     ports:
-      - "5000:80"
+      - "5001:80"
+    networks:
+      - open-telemetry
+    depends_on:
+      - jaeger
+      - usersDb
+      - legislationswebapi
+      - prometheus
+    environment:
+      JaegerExporter__AgentHost: jaeger
+      JaegerExporter__AgentPort: 6831
+      LegislationsClient__Endpoint: http://legislationswebapi:80
+      Datasource__ConnectionString: Server=usersDb;Database=UsersStore;Integrated Security=False;User ID=sqlserver;Password=Password123!;Application Name=UsersService;ConnectRetryCount=5;ConnectRetryInterval=5;
+
+  hiveuserswebapi:
+    container_name: hiveuserswebapi
+    hostname: hiveuserswebapi
+    image: hiveuserswebapi
+    build:
+      context: .
+      dockerfile: src/OpenTelemetry.Demo.Hive.Users.WebApi/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "5050:80"
     networks:
       - open-telemetry
     depends_on:
@@ -195,3 +218,30 @@ services:
       RabbitMessageBus__VirtualHost: sbtrd
       RabbitMessageBus__Username: sbdev
       RabbitMessageBus__Password: sbdev
+      
+  consumerservice2:
+    container_name: consumerservice2
+    hostname: consumerservice2
+    image: consumerservice
+    build:
+      context: .
+      dockerfile: src/OpenTelemetry.Demo.Consumer/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "7070:80"
+    networks:
+      - open-telemetry
+    depends_on:
+      - jaeger
+      - rmq0
+      - rmq1
+      - rmq2
+    environment:
+      JaegerExporter__AgentHost: jaeger
+      JaegerExporter__AgentPort: 6831
+      Metrics__Host: consumerservice2
+      Metrics__Port: 80
+      RabbitMessageBus__Hosts: rmq0:5672,rmq1:5674,rmq2:5675
+      RabbitMessageBus__VirtualHost: sbtrd
+      RabbitMessageBus__Username: sbdev
+      RabbitMessageBus__Password: sbdev      

@@ -80,7 +80,7 @@ namespace OpenTelemetry.Demo.Consumer
                             var traceProvider = Sdk.CreateTracerProviderBuilder()
                                 .AddSource(nameof(ConsumerService))
                                 .SetResourceBuilder(ResourceBuilder.CreateDefault()
-                                    .AddService("OpenTelemetry.Demo.Consumer"))
+                                    .AddService("OpenTelemetry.Demo.Consumer." + Guid.NewGuid().ToString()))
                                 .AddJaegerExporter(opts =>
                                 {
                                     opts.AgentHost = jaegerOptions.AgentHost;

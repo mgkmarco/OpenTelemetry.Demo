@@ -42,10 +42,9 @@ namespace OpenTelemetry.Demo.Users.WebApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            
+
             //Prometheus Http Metrics
-            app.UseHttpMetrics();
-                
+            app.UseHttpMetrics();            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

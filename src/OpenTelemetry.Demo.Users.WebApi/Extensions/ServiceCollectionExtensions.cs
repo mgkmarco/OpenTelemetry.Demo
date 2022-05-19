@@ -53,7 +53,7 @@ namespace OpenTelemetry.Demo.Users.WebApi.Extensions
             {
                 builder.AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
-                    .AddSqlClientInstrumentation(options => options.SetDbStatementForText = true)
+                    .AddSqlClientInstrumentation(options => { options.SetDbStatementForText = true; options.SetDbStatementForStoredProcedure = true; })
                     .AddSource("UsersController")
                     .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("OpenTelemetry.Demo.Users.WebApi"))
                     .AddJaegerExporter(opts =>

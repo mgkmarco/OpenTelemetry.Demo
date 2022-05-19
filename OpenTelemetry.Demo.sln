@@ -12,9 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{20DCA5
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTelemetry.Demo.Legislations.WebApi", "src\OpenTelemetry.Demo.Legislations.WebApi\OpenTelemetry.Demo.Legislations.WebApi.csproj", "{374EDCD1-2EF4-40B1-8730-322A0B1B24C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenTelemetry.Demo.Legislations.WebApi", "src\OpenTelemetry.Demo.Legislations.WebApi\OpenTelemetry.Demo.Legislations.WebApi.csproj", "{374EDCD1-2EF4-40B1-8730-322A0B1B24C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTelemetry.Demo.Consumer", "src\OpenTelemetry.Demo.Consumer\OpenTelemetry.Demo.Consumer.csproj", "{B04F8177-4303-46C1-8076-6D66222A2B75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenTelemetry.Demo.Consumer", "src\OpenTelemetry.Demo.Consumer\OpenTelemetry.Demo.Consumer.csproj", "{B04F8177-4303-46C1-8076-6D66222A2B75}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenTelemetry.Demo.Hive.Users.WebApi", "src\OpenTelemetry.Demo.Hive.Users.WebApi\OpenTelemetry.Demo.Hive.Users.WebApi.csproj", "{B12A3442-A8FD-4FA3-B427-35DC19B005BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +26,7 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{FA2FF07A-5223-4DC2-8493-E83E3326B18A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FA2FF07A-5223-4DC2-8493-E83E3326B18A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA2FF07A-5223-4DC2-8493-E83E3326B18A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA2FF07A-5223-4DC2-8493-E83E3326B18A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{59431CE9-B7BD-4C20-96E1-F235AA116514}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{59431CE9-B7BD-4C20-96E1-F235AA116514}.Debug|Any CPU.Build.0 = Debug|Any CPU
@@ -37,6 +40,10 @@ Global
 		{B04F8177-4303-46C1-8076-6D66222A2B75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B04F8177-4303-46C1-8076-6D66222A2B75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B04F8177-4303-46C1-8076-6D66222A2B75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B12A3442-A8FD-4FA3-B427-35DC19B005BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B12A3442-A8FD-4FA3-B427-35DC19B005BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B12A3442-A8FD-4FA3-B427-35DC19B005BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B12A3442-A8FD-4FA3-B427-35DC19B005BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
